@@ -1,17 +1,18 @@
-import { useDispatch, useSelector } from "react-redux";
-import type { AppDispatch, RootState } from "../store/store";
+import type { RootState } from "../store/store";
+import { useAppDispatch, useAppSelector } from "../app/hooks/storeHooks";
 
 import { useEffect } from "react";
 import { fetchCars } from "../store/slices/carSlice";
 
 import type { Car } from "../types/car";
 function CarCard() {
-  const dispatch = useDispatch<AppDispatch>();
-  const { list: cars, loading } = useSelector((state: RootState) => state.car);
+  const { list: cars, loading } = useAppSelector(
+    (state: RootState) => state.car
+  );
 
   useEffect(() => {
-    dispatch(fetchCars());
-  }, [dispatch]);
+    useAppDispatch()(fetchCars());
+  }, [useAppDispatch]);
 
   return (
     <div>

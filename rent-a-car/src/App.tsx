@@ -1,5 +1,5 @@
-import CarCard from "./components/CarCard";
+import { RouterProvider } from "react-router-dom";
 
 export default function App() {
-  return <CarCard />;
+  return <RouterProvider router={router} />;
 }
