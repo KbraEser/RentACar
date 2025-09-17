@@ -23,19 +23,40 @@ const HomePage = () => {
           <img
             src={homeCarImage}
             alt="homeCar"
-            className="w-2/3 h-full object-cover mr-10"
+            className="xl:w-2/3 xl:h-full object-cover  xl:mr-10 "
           />
         </div>
       </div>
       <div className="inform-section">
         <div className="reservation-section">
-          <h2 className="hero-title">Araç Kiralama</h2>
+          <h2 className="inform-title">Araç Kiralama</h2>
           <div className="search-card">
-            <div className="field">
-              <label htmlFor="start" className="search-text">
-                Başlangıç Tarihi
-              </label>
-            </div>
+            <input
+              placeholder="Başlangıç Tarihi"
+              type="text"
+              id="start"
+              className="search-input"
+              onFocus={(e) => (e.target.type = "date")}
+              onBlur={(e) => (e.target.type = "text")}
+            />
+
+            <input
+              placeholder="Bitiş Tarihi"
+              type="text"
+              id="end"
+              className="search-input"
+              onFocus={(e) => (e.target.type = "date")}
+              onBlur={(e) => (e.target.type = "text")}
+            />
+
+            <input
+              placeholder="Lokasyon"
+              type="text"
+              id="location"
+              className="search-input"
+            />
+
+            <button className="search-button">Rezervasyon Yapın</button>
           </div>
         </div>
       </div>
