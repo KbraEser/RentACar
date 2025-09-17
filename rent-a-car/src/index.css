@@ -6,17 +6,16 @@
   box-sizing: border-box;
 }
 body {
-  margin: 0;
-  background: #fffafa36;
+  background: rgb(241, 238, 238);
 }
 
 @layer components {
   .hero-section {
-    @apply bg-gray-200 h-[40vh] lg:h-[45vh] flex justify-between gap-10;
+    @apply bg-slate-900 h-[40vh] lg:h-[45vh] flex justify-between;
   }
 
   .text-section {
-    @apply md:w-1/3 sm:w-full pt-5 lg:pt-10 pl-10 lg:pl-20;
+    @apply md:w-1/3 sm:w-full p-5 lg:pt-10 pl-10 md:pr-0 lg:pl-20 text-white;
   }
 
   .image-section {
@@ -24,11 +23,11 @@ body {
   }
 
   .hero-title {
-    @apply text-black text-xl font-bold;
+    @apply text-white text-xl font-bold;
   }
 
   .hero-description {
-    @apply text-black pt-3 text-xs lg:text-base;
+    @apply text-white pt-3 text-xs lg:text-base;
   }
 
   .button-container {
@@ -36,14 +35,29 @@ body {
   }
 
   .primary-button {
-    @apply bg-orange-500 border border-black text-white text-sm px-2 py-2 rounded-md hover:bg-orange-700;
+    @apply bg-orange-600 border border-white text-white text-sm px-2 py-2 rounded-md hover:bg-orange-500;
   }
 
   .secondary-button {
-    @apply bg-gray-300 border border-black text-black text-sm px-2 py-2 rounded-md hover:bg-gray-400;
+    @apply bg-gray-600 border border-white text-white text-sm px-2 py-2 rounded-md hover:bg-gray-400;
   }
 
   .inform-section {
-    @apply pt-5 lg:pt-10 pl-10 lg:pl-20;
+    @apply pt-5 lg:pt-10 p-10 lg:p-20;
+  }
+
+  .inform-title {
+    @apply text-black pb-5 pr-7 text-xl font-bold;
+  }
+
+  .search-card {
+    @apply bg-white p-4 lg:p-6 lg:pr-7 flex flex-col sm:flex-row sm:flex-wrap gap-4 sm:gap-6 md:gap-8 lg:gap-12 xl:gap-28;
+  }
+
+  .search-input {
+    @apply border border-gray-300 rounded-md px-3 py-2 flex-1 min-w-0;
+  }
+  .search-button {
+    @apply bg-orange-600 text-white px-7 py-2 rounded-md hover:bg-orange-500 transition-colors;
   }
 }
