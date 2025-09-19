@@ -1,20 +1,25 @@
-import React from "react";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
-    <nav className="bg-blue-600 text-white p-4">
-      <div className="container mx-auto flex justify-between items-center">
-        <h1 className="text-xl font-bold">Rent A Car</h1>
-        <div className="space-x-4">
-          <a href="/" className="hover:text-blue-200">
+    <nav className="navbar">
+      <div className="navbar-container">
+        <Link to="/" className="navbar-logo">
+          CarRental
+        </Link>
+        <div className="navbar-links">
+          <Link to="/" className="navbar-link">
             Ana Sayfa
-          </a>
-          <a href="/cars" className="hover:text-blue-200">
+          </Link>
+          <Link to="/cars" className="navbar-link">
             Araçlar
-          </a>
-          <a href="/about" className="hover:text-blue-200">
+          </Link>
+          <Link to="/about" className="navbar-link">
             Hakkımızda
-          </a>
+          </Link>
+          <Link to="/contact" className="navbar-link">
+            İletişim
+          </Link>
         </div>
       </div>
     </nav>

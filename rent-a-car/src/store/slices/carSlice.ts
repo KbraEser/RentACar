@@ -3,6 +3,7 @@ import type { Car } from "../../types/car";
 import {
   fetchCarByIdService,
   fetchCarsService,
+  fetchFeaturedCarsService,
 } from "../../services/carService";
 
 type CarState = {
@@ -10,6 +11,7 @@ type CarState = {
   selectedCar: Car | null;
   loading: boolean;
   error: string | null;
+  featuredCars: Car[];
 };
 
 const initialState: CarState = {
@@ -17,6 +19,7 @@ const initialState: CarState = {
   selectedCar: null,
   loading: false,
   error: null,
+  featuredCars: [],
 };
 
 export const fetchCars = createAsyncThunk("cars/fetchCars", async () => {
@@ -27,6 +30,13 @@ export const fetchCarById = createAsyncThunk(
   "cars/fetchCarById",
   async (id: number) => {
     return await fetchCarByIdService(id);
+  }
+);
+
+export const fetchFeaturedCars = createAsyncThunk(
+  "cars/fetchFeaturedCars",
+  async () => {
+    return await fetchFeaturedCarsService();
   }
 );
 
@@ -58,6 +68,9 @@ const carSlice = createSlice({
       .addCase(fetchCarById.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || "Failed to fetch car by id";
+      })
+      .addCase(fetchFeaturedCars.fulfilled, (state, action) => {
+        state.featuredCars = action.payload;
       });
   },
 });
