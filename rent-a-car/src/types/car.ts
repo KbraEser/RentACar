@@ -4,7 +4,6 @@ export type Car = {
   model: string;
   year: number;
   price_per_day: number;
-  image_url: string;
   description: string;
   fuel_type: string;
   seats: number;
@@ -12,4 +11,5 @@ export type Car = {
   created_at: string;
   updated_at: string;
   transmission: string;
+  is_featured: boolean;
 };

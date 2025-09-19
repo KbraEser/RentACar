@@ -16,3 +16,12 @@ export const fetchCarByIdService = async (id: number): Promise<Car | null> => {
   if (error) throw new Error(error.message);
   return data as Car;
 };
+
+export const fetchFeaturedCarsService = async (): Promise<Car[]> => {
+  const { data, error } = await supabase
+    .from("cars")
+    .select("*")
+    .eq("is_featured", true);
+  if (error) throw new Error(error.message);
+  return data as Car[];
+};
