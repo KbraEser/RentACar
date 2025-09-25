@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { Car } from "../../types/car";
 import {
-  fetchCarByIdService,
-  fetchCarsService,
-  fetchFeaturedCarsService,
+  fetchCarById as fetchCarByIdService,
+  fetchAllCars,
+  fetchFeaturedCars as fetchFeaturedCarsService,
 } from "../../services/carService";
 
 type CarState = {
@@ -23,7 +23,7 @@ const initialState: CarState = {
 };
 
 export const fetchCars = createAsyncThunk("cars/fetchCars", async () => {
-  return await fetchCarsService();
+  return await fetchAllCars();
 });
 
 export const fetchCarById = createAsyncThunk(

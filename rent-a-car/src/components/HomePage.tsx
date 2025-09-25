@@ -66,6 +66,12 @@ const HomePage = () => {
               id="location"
               className="search-input"
             />
+            <input
+              placeholder="Araç Modeli"
+              type="text"
+              id="model"
+              className="search-input"
+            />
 
             <button className="search-button">Rezervasyon Yapın</button>
           </div>

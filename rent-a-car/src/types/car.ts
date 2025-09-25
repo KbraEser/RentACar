@@ -1,5 +1,5 @@
 export type Car = {
-  id: string;
+  id: number;
   make: string;
   model: string;
   year: number;
@@ -12,4 +12,5 @@ export type Car = {
   updated_at: string;
   transmission: string;
   is_featured: boolean;
+  city: string;
 };
