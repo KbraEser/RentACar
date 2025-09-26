@@ -20,6 +20,9 @@ const Navbar = () => {
           <Link to="/contact" className="navbar-link">
             İletişim
           </Link>
+          <Link to="/auth/login" className="navbar-link">
+            Giriş Yap
+          </Link>
         </div>
       </div>
     </nav>

@@ -214,4 +214,11 @@ body {
   .icon-description {
     @apply text-sm;
   }
+
+  .auth-input {
+    @apply w-1/2 p-2 border-2 border-gray-300 rounded-md mb-4;
+  }
+  .auth-button {
+    @apply mt-4 w-1/2 p-2 bg-orange-600 text-white rounded-md;
+  }
 }

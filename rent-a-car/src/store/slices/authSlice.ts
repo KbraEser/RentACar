@@ -1,6 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { supabase } from "../../lib/supabaseClient";
 import type { User, Session } from "@supabase/supabase-js";
+import {
+  signUp as signUpService,
+  signIn as signInService,
+  signOut as signOutService,
+  getSession as getSessionService,
+} from "../../services/authService";
 
 type AuthState = {
   user: User | null;
@@ -19,37 +24,30 @@ const initialState: AuthState = {
 // Async thunks
 export const signUp = createAsyncThunk(
   "auth/signUp",
-  async ({ email, password }: { email: string; password: string }) => {
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
-    if (error) throw error;
-    return data;
+  async (data: {
+    email: string;
+    password: string;
+    name: string;
+    surname: string;
+    passwordConfirm: string;
+  }) => {
+    return await signUpService(data);
   }
 );
 
 export const signIn = createAsyncThunk(
   "auth/signIn",
-  async ({ email, password }: { email: string; password: string }) => {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    if (error) throw error;
-    return data;
+  async (data: { email: string; password: string }) => {
+    return await signInService(data);
   }
 );
 
 export const signOut = createAsyncThunk("auth/signOut", async () => {
-  const { error } = await supabase.auth.signOut();
-  if (error) throw error;
+  return await signOutService();
 });
 
 export const getSession = createAsyncThunk("auth/getSession", async () => {
-  const { data, error } = await supabase.auth.getSession();
-  if (error) throw error;
-  return data;
+  return await getSessionService();
 });
 
 const authSlice = createSlice({
