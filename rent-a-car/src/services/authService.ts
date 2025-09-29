@@ -43,6 +43,7 @@ export const signUp = async (data: SignUpData): Promise<AuthResponse> => {
       id: authData.user.id,
       name,
       surname,
+      email,
     });
 
     if (insertError) throw insertError;
