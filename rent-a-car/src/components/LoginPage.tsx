@@ -2,6 +2,8 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../app/hooks/storeHooks";
 import { signIn } from "../store/slices/authSlice";
+import { useState } from "react";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 interface LoginFormData {
   email: string;
@@ -10,7 +12,8 @@ interface LoginFormData {
 const LoginPage = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { register, handleSubmit, watch } = useForm<LoginFormData>();
+  const { register, handleSubmit } = useForm<LoginFormData>();
+  const [showPassword, setShowPassword] = useState(false);
 
   const onSubmit = (data: LoginFormData) => {
     dispatch(signIn({ email: data.email, password: data.password }));
@@ -28,12 +31,25 @@ const LoginPage = () => {
           type="email"
           placeholder="Email"
         />
-        <input
-          {...register("password")}
-          className="auth-input"
-          type="password"
-          placeholder="Şifre"
-        />
+        <div className="relative ">
+          <input
+            {...register("password")}
+            className="auth-input"
+            type={showPassword ? "text" : "password"}
+            placeholder="Şifre"
+          />
+          <button
+            type="button"
+            className="absolute left-48 top-3 "
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? (
+              <AiOutlineEyeInvisible size={18} />
+            ) : (
+              <AiOutlineEye size={18} />
+            )}
+          </button>
+        </div>
         <button className=" auth-button" type="submit">
           Giriş Yap
         </button>
