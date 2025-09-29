@@ -4,6 +4,8 @@ import { signUp } from "../store/slices/authSlice";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { toast } from "react-toastify";
+import { supabase } from "../lib/supabaseClient";
 
 interface RegisterFormData {
   name: string;
@@ -28,23 +30,50 @@ const RegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
 
-  const onSubmit = (data: RegisterFormData) => {
-    // Şifre doğrulama kontrolü
-    if (data.password !== data.passwordConfirm) {
-      alert("Şifreler eşleşmiyor!");
-      return;
+  const isUserExists = async (email: string) => {
+    const { data, error } = await supabase
+      .from("users")
+      .select("*")
+      .eq("email", email);
+    if (error) {
+      console.error("Kullanıcı kontrolü hatası:", error);
+      return false;
     }
+    return data && data.length > 0;
+  };
 
-    dispatch(
-      signUp({
-        name: data.name,
-        surname: data.surname,
-        email: data.email,
-        password: data.password,
-        passwordConfirm: data.passwordConfirm,
-      })
-    );
-    reset();
+  const onSubmit = async (data: RegisterFormData) => {
+    try {
+      // Şifre doğrulama kontrolü
+      if (data.password !== data.passwordConfirm) {
+        toast.error("Şifreler eşleşmiyor!");
+        return;
+      }
+
+      const userExists = await isUserExists(data.email);
+      if (userExists) {
+        toast.error(
+          "Bu email adresi ile zaten kayıtlı bir kullanıcı bulunmaktadır. Lütfen giriş yapmayı deneyin."
+        );
+        return;
+      }
+
+      await dispatch(
+        signUp({
+          name: data.name,
+          surname: data.surname,
+          email: data.email,
+          password: data.password,
+          passwordConfirm: data.passwordConfirm,
+        })
+      );
+
+      toast.success("Kayıt başarılı! Giriş sayfasına yönlendiriliyorsunuz.");
+      reset();
+      navigate("/auth/login");
+    } catch (error) {
+      toast.error("Kayıt başarısız. Lütfen bilgilerinizi kontrol edin.");
+    }
   };
 
   return (

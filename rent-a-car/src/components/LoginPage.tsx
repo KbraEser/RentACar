@@ -4,6 +4,7 @@ import { useAppDispatch } from "../app/hooks/storeHooks";
 import { signIn } from "../store/slices/authSlice";
 import { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { toast } from "react-toastify";
 
 interface LoginFormData {
   email: string;
@@ -15,8 +16,14 @@ const LoginPage = () => {
   const { register, handleSubmit } = useForm<LoginFormData>();
   const [showPassword, setShowPassword] = useState(false);
 
-  const onSubmit = (data: LoginFormData) => {
-    dispatch(signIn({ email: data.email, password: data.password }));
+  const onSubmit = async (data: LoginFormData) => {
+    try {
+      await dispatch(signIn({ email: data.email, password: data.password }));
+      toast.success("Giriş başarılı! Hoş geldiniz.");
+      navigate("/");
+    } catch (error) {
+      toast.error("Giriş başarısız. Email veya şifrenizi kontrol edin.");
+    }
   };
 
   return (
