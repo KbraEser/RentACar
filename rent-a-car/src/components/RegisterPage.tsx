@@ -2,6 +2,8 @@ import { useForm } from "react-hook-form";
 import { useAppDispatch } from "../app/hooks/storeHooks";
 import { signUp } from "../store/slices/authSlice";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 interface RegisterFormData {
   name: string;
@@ -23,6 +25,8 @@ const RegisterPage = () => {
 
   const password = watch("password");
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
 
   const onSubmit = (data: RegisterFormData) => {
     // Şifre doğrulama kontrolü
@@ -81,30 +85,57 @@ const RegisterPage = () => {
           {errors.email && (
             <p className="text-red-500">{errors.email.message}</p>
           )}
-          <input
-            {...register("password", {
-              required: "Şifre gerekli",
-              minLength: {
-                value: 6,
-                message: "Şifre en az 6 karakter olmalıdır",
-              },
-            })}
-            className="auth-input"
-            type="password"
-            placeholder="Şifre"
-          />
+          <div className="relative">
+            <input
+              {...register("password", {
+                required: "Şifre gerekli",
+                minLength: {
+                  value: 6,
+                  message: "Şifre en az 6 karakter olmalıdır",
+                },
+              })}
+              className="auth-input pr-12"
+              type={showPassword ? "text" : "password"}
+              placeholder="Şifre"
+            />
+            <button
+              type="button"
+              className="absolute right-2 top-5 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none flex items-center justify-center w-6 h-6"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? (
+                <AiOutlineEyeInvisible size={18} />
+              ) : (
+                <AiOutlineEye size={18} />
+              )}
+            </button>
+          </div>
           {errors.password && (
             <p className="text-red-500">{errors.password.message}</p>
           )}
-          <input
-            {...register("passwordConfirm", {
-              required: "Şifre tekrar gerekli",
-              validate: (value) => value === password || "Şifreler eşleşmiyor",
-            })}
-            className="auth-input"
-            type="password"
-            placeholder="Şifre Tekrar"
-          />
+          <div className="relative">
+            <input
+              {...register("passwordConfirm", {
+                required: "Şifre tekrar gerekli",
+                validate: (value) =>
+                  value === password || "Şifreler eşleşmiyor",
+              })}
+              className="auth-input pr-12"
+              type={showPasswordConfirm ? "text" : "password"}
+              placeholder="Şifre Tekrar"
+            />
+            <button
+              type="button"
+              className="absolute right-2 top-5 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none flex items-center justify-center w-6 h-6"
+              onClick={() => setShowPasswordConfirm(!showPasswordConfirm)}
+            >
+              {showPasswordConfirm ? (
+                <AiOutlineEyeInvisible size={18} />
+              ) : (
+                <AiOutlineEye size={18} />
+              )}
+            </button>
+          </div>
           {errors.passwordConfirm && (
             <p className="text-red-500">{errors.passwordConfirm.message}</p>
           )}
