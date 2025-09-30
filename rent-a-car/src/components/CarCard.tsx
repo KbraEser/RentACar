@@ -240,9 +240,11 @@ function CarCard() {
               <p className="text-xl font-bold text-blue-600">
                 {car.price_per_day}₺/gün
               </p>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-500 mb-4">
                 {car.fuel_type} • {car.seats} kişi • {car.transmission}
               </p>
+              <button className="primary-button">Detaylı Bilgi</button>
+              <button className="secondary-button">Rezervasyon Yap</button>
             </div>
           </div>
         ))}
