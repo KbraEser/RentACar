@@ -1,69 +1,39 @@
-# React + TypeScript + Vite
+# 🚗 CarRental - Araç Kiralama Sistemi
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Modern, responsive araç kiralama web uygulaması. React, TypeScript ve Supabase ile geliştirilmiştir.
 
-Currently, two official plugins are available:
+## ✨ Özellikler
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **🔐 Kimlik Doğrulama**: Kullanıcı kaydı, giriş/çıkış
+- **🚗 Araç Yönetimi**: Araç listesi, detaylar, filtreleme
+- **📱 Responsive Tasarım**: Mobil uyumlu modern UI
+- **🎛️ Dashboard**: Kullanıcı paneli ve hızlı erişim
+- **🎨 Modern UI**: Tailwind CSS ile şık tasarım
 
-## Expanding the ESLint configuration
+## 🛠️ Teknolojiler
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Frontend**: React 19, TypeScript, Vite, Tailwind CSS
+- **State**: Redux Toolkit, React Redux
+- **Backend**: Supabase (PostgreSQL)
+- **UI**: React Icons, React Hook Form, React Toastify
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 🔄 Geliştirme Durumu
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+### ✅ Tamamlanan
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- Kimlik doğrulama sistemi
+- Araç listesi ve detayları
+- Responsive tasarım
+- Dashboard layout'u
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 🚧 Geliştiriliyor
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- Rezervasyon sistemi
+- Profil yönetimi
+- Ödeme entegrasyonu
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### 📋 Gelecek
+
+- Admin paneli
+- Mobil uygulama
+- Çoklu dil desteği
