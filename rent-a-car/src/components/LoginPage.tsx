@@ -20,7 +20,7 @@ const LoginPage = () => {
     try {
       await dispatch(signIn({ email: data.email, password: data.password }));
       toast.success("Giriş başarılı! Hoş geldiniz.");
-      navigate("/");
+      navigate("/dashboard");
     } catch (error) {
       toast.error("Giriş başarısız. Email veya şifrenizi kontrol edin.");
     }
