@@ -5,6 +5,7 @@ import {
   fetchAllCars,
   fetchFeaturedCars as fetchFeaturedCarsService,
 } from "../../services/carService";
+import { ERROR_MESSAGES } from "../../types/errors";
 
 type CarState = {
   list: Car[];
@@ -56,7 +57,7 @@ const carSlice = createSlice({
       })
       .addCase(fetchCars.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || "Failed to fetch cars";
+        state.error = action.error.message || ERROR_MESSAGES.CAR_FETCH_FAILED;
       })
       .addCase(fetchCarById.pending, (state) => {
         state.loading = true;
@@ -67,7 +68,7 @@ const carSlice = createSlice({
       })
       .addCase(fetchCarById.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || "Failed to fetch car by id";
+        state.error = action.error.message || ERROR_MESSAGES.CAR_NOT_FOUND;
       })
       .addCase(fetchFeaturedCars.fulfilled, (state, action) => {
         state.featuredCars = action.payload;

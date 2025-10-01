@@ -1,4 +1,9 @@
 import { supabase } from "../lib/supabaseClient";
+import {
+  handleError,
+  validateInput,
+  validateDateRange,
+} from "../utils/errorHandler";
 
 export const createReservationService = async (
   userId: string,
@@ -7,6 +12,16 @@ export const createReservationService = async (
   endDate: string,
   totalPrice: number
 ) => {
+  // Input validation
+  validateInput(userId, "User ID");
+  validateInput(carId, "Car ID");
+  validateInput(startDate, "Start Date");
+  validateInput(endDate, "End Date");
+  validateInput(totalPrice, "Total Price");
+
+  // Date range validation
+  validateDateRange(startDate, endDate);
+
   const { data, error } = await supabase
     .from("rentals")
     .insert([
@@ -20,19 +35,26 @@ export const createReservationService = async (
       },
     ])
     .select();
+
   if (error) {
-    throw new Error(error.message);
+    throw new Error(handleError(error, "ReservationService.createReservation"));
   }
+
   return data;
 };
 
 export const fetchReservationsService = async (userId: string) => {
+  // Input validation
+  validateInput(userId, "User ID");
+
   const { data, error } = await supabase
     .from("rentals")
     .select("id,user_id,car_id,start_date,end_date,total_price,status")
     .eq("user_id", userId);
+
   if (error) {
-    throw new Error(error.message);
+    throw new Error(handleError(error, "ReservationService.fetchReservations"));
   }
+
   return data;
 };

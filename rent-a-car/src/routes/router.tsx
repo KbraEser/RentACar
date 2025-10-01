@@ -11,6 +11,22 @@ import {
   fetchCarById,
 } from "../services/carService";
 
+// Ortak car loader fonksiyonu
+const carLoader = async ({ params }: { params: any }) => {
+  try {
+    if (
+      !params.id ||
+      typeof params.id !== "string" ||
+      params.id.trim() === ""
+    ) {
+      throw new Error("Geçersiz araç ID'si");
+    }
+    return await fetchCarById(params.id);
+  } catch (error) {
+    throw error;
+  }
+};
+
 import CarCard from "../components/CarCard";
 import CarDetailsModel from "../components/CarDetailsModal";
 import LoginPage from "../components/LoginPage";
@@ -40,16 +56,7 @@ export default createBrowserRouter([
       {
         path: "cars/carsDetail/:id",
         element: <CarDetailsModel />,
-        loader: async ({ params }) => {
-          if (
-            !params.id ||
-            typeof params.id !== "string" ||
-            params.id.trim() === ""
-          ) {
-            throw new Error("Invalid car ID");
-          }
-          return await fetchCarById(params.id);
-        },
+        loader: carLoader,
       },
     ],
   },
@@ -89,30 +96,12 @@ export default createBrowserRouter([
       {
         path: "cars/:id",
         element: <CarDetailsModel />,
-        loader: async ({ params }) => {
-          if (
-            !params.id ||
-            typeof params.id !== "string" ||
-            params.id.trim() === ""
-          ) {
-            throw new Error("Invalid car ID");
-          }
-          return await fetchCarById(params.id);
-        },
+        loader: carLoader,
       },
       {
         path: "reservationForm/:id",
         element: <RezervationForm />,
-        loader: async ({ params }) => {
-          if (
-            !params.id ||
-            typeof params.id !== "string" ||
-            params.id.trim() === ""
-          ) {
-            throw new Error("Invalid car ID");
-          }
-          return await fetchCarById(params.id);
-        },
+        loader: carLoader,
       },
       // {
       //   path: "reservations",

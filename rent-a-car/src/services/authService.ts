@@ -1,5 +1,6 @@
 import { supabase } from "../lib/supabaseClient";
 import type { User, Session } from "@supabase/supabase-js";
+import { handleError, validateInput } from "../utils/errorHandler";
 
 export interface SignUpData {
   email: string;
@@ -21,6 +22,12 @@ export interface AuthResponse {
 
 // Kullanıcı kayıt işlemi
 export const signUp = async (data: SignUpData): Promise<AuthResponse> => {
+  // Input validation
+  validateInput(data.email, "Email");
+  validateInput(data.password, "Şifre");
+  validateInput(data.name, "Ad");
+  validateInput(data.surname, "Soyad");
+
   const { email, password, name, surname } = data;
 
   // 1. Supabase Auth'a kaydet
@@ -35,7 +42,9 @@ export const signUp = async (data: SignUpData): Promise<AuthResponse> => {
     },
   });
 
-  if (error) throw error;
+  if (error) {
+    throw new Error(handleError(error, "AuthService.signUp"));
+  }
 
   // 2. Kullanıcı onaylandıktan sonra users tablosuna ekle
   if (authData.user) {
@@ -46,7 +55,11 @@ export const signUp = async (data: SignUpData): Promise<AuthResponse> => {
       email,
     });
 
-    if (insertError) throw insertError;
+    if (insertError) {
+      throw new Error(
+        handleError(insertError, "AuthService.signUp - User Insert")
+      );
+    }
   }
 
   return authData;
@@ -54,6 +67,10 @@ export const signUp = async (data: SignUpData): Promise<AuthResponse> => {
 
 // Kullanıcı giriş işlemi
 export const signIn = async (data: SignInData): Promise<AuthResponse> => {
+  // Input validation
+  validateInput(data.email, "Email");
+  validateInput(data.password, "Şifre");
+
   const { email, password } = data;
 
   const { data: authData, error } = await supabase.auth.signInWithPassword({
@@ -61,20 +78,27 @@ export const signIn = async (data: SignInData): Promise<AuthResponse> => {
     password,
   });
 
-  if (error) throw error;
+  if (error) {
+    throw new Error(handleError(error, "AuthService.signIn"));
+  }
+
   return authData;
 };
 
 // Kullanıcı çıkış işlemi
 export const signOut = async (): Promise<void> => {
   const { error } = await supabase.auth.signOut();
-  if (error) throw error;
+  if (error) {
+    throw new Error(handleError(error, "AuthService.signOut"));
+  }
 };
 
 // Mevcut oturumu getir
 export const getSession = async (): Promise<{ session: Session | null }> => {
   const { data, error } = await supabase.auth.getSession();
-  if (error) throw error;
+  if (error) {
+    throw new Error(handleError(error, "AuthService.getSession"));
+  }
   return data;
 };
 
@@ -84,6 +108,8 @@ export const getUser = async (): Promise<User | null> => {
     data: { user },
     error,
   } = await supabase.auth.getUser();
-  if (error) throw error;
+  if (error) {
+    throw new Error(handleError(error, "AuthService.getUser"));
+  }
   return user;
 };

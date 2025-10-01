@@ -3,6 +3,7 @@ import {
   fetchReservationsService,
   createReservationService,
 } from "../../services/reservationService";
+import { ERROR_MESSAGES } from "../../types/errors";
 
 interface Rentals {
   id: string;
@@ -64,7 +65,8 @@ const rentalsSlice = createSlice({
       })
       .addCase(fetchReservations.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || "Failed to fetch reservations";
+        state.error =
+          action.error.message || ERROR_MESSAGES.RESERVATION_FETCH_FAILED;
       })
       .addCase(createReservation.pending, (state) => {
         state.loading = true;
@@ -76,7 +78,8 @@ const rentalsSlice = createSlice({
       })
       .addCase(createReservation.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || "Failed to create reservation";
+        state.error =
+          action.error.message || ERROR_MESSAGES.RESERVATION_CREATE_FAILED;
       });
   },
 });

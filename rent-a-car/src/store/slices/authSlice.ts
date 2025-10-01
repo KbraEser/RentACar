@@ -6,6 +6,7 @@ import {
   signOut as signOutService,
   getSession as getSessionService,
 } from "../../services/authService";
+import { ERROR_MESSAGES } from "../../types/errors";
 
 type AuthState = {
   user: User | null;
@@ -78,7 +79,7 @@ const authSlice = createSlice({
       })
       .addCase(signUp.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || "Sign up failed";
+        state.error = action.error.message || ERROR_MESSAGES.SIGNUP_FAILED;
       })
       // Sign In
       .addCase(signIn.pending, (state) => {
@@ -92,7 +93,7 @@ const authSlice = createSlice({
       })
       .addCase(signIn.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || "Sign in failed";
+        state.error = action.error.message || ERROR_MESSAGES.SIGNIN_FAILED;
       })
       // Sign Out
       .addCase(signOut.pending, (state) => {
@@ -105,7 +106,7 @@ const authSlice = createSlice({
       })
       .addCase(signOut.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || "Sign out failed";
+        state.error = action.error.message || "Çıkış işlemi başarısız";
       })
       // Get Session
       .addCase(getSession.pending, (state) => {
@@ -118,7 +119,7 @@ const authSlice = createSlice({
       })
       .addCase(getSession.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || "Failed to get session";
+        state.error = action.error.message || "Oturum bilgisi alınamadı";
       });
   },
 });
