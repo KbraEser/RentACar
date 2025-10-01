@@ -16,13 +16,12 @@ import CarDetailsModel from "../components/CarDetailsModal";
 import LoginPage from "../components/LoginPage";
 import RegisterPage from "../components/RegisterPage";
 import Dashboard from "../components/dashboard/Dashboard";
-import { fetchReservations } from "../store/slices/rentalsSlice";
 import RezervationForm from "../components/dashboard/ReservationForm";
 export default createBrowserRouter([
   {
     path: "/",
     element: <MainLayout />,
-    // errorElement: <ErrorPage />,
+
     children: [
       {
         index: true,
@@ -42,7 +41,14 @@ export default createBrowserRouter([
         path: "cars/carsDetail/:id",
         element: <CarDetailsModel />,
         loader: async ({ params }) => {
-          return await fetchCarById(Number(params.id));
+          if (
+            !params.id ||
+            typeof params.id !== "string" ||
+            params.id.trim() === ""
+          ) {
+            throw new Error("Invalid car ID");
+          }
+          return await fetchCarById(params.id);
         },
       },
     ],
@@ -84,14 +90,28 @@ export default createBrowserRouter([
         path: "cars/:id",
         element: <CarDetailsModel />,
         loader: async ({ params }) => {
-          return await fetchCarById(Number(params.id));
+          if (
+            !params.id ||
+            typeof params.id !== "string" ||
+            params.id.trim() === ""
+          ) {
+            throw new Error("Invalid car ID");
+          }
+          return await fetchCarById(params.id);
         },
       },
       {
         path: "reservationForm/:id",
         element: <RezervationForm />,
         loader: async ({ params }) => {
-          return await fetchCarById(Number(params.id));
+          if (
+            !params.id ||
+            typeof params.id !== "string" ||
+            params.id.trim() === ""
+          ) {
+            throw new Error("Invalid car ID");
+          }
+          return await fetchCarById(params.id);
         },
       },
       // {

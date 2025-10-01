@@ -1,11 +1,13 @@
 import { useForm } from "react-hook-form";
-import { useAppDispatch } from "../app/hooks/storeHooks";
+import { useAppDispatch, useAppSelector } from "../app/hooks/storeHooks";
 import { signUp } from "../store/slices/authSlice";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { toast } from "react-toastify";
 import { supabase } from "../lib/supabaseClient";
+import type { RootState } from "../store/store";
+import myLoggerService from "../services/loggerService";
 
 interface RegisterFormData {
   name: string;
@@ -24,6 +26,7 @@ const RegisterPage = () => {
     reset,
   } = useForm<RegisterFormData>();
   const dispatch = useAppDispatch();
+  const loading = useAppSelector((state: RootState) => state.auth.loading);
 
   const password = watch("password");
   const navigate = useNavigate();
@@ -36,7 +39,8 @@ const RegisterPage = () => {
       .select("*")
       .eq("email", email);
     if (error) {
-      console.error("Kullanıcı kontrolü hatası:", error);
+      console.error("User validation error:", error);
+      myLoggerService.error("Failed to validate user existence", error);
       return false;
     }
     return data && data.length > 0;
@@ -168,8 +172,8 @@ const RegisterPage = () => {
           {errors.passwordConfirm && (
             <p className="text-red-500">{errors.passwordConfirm.message}</p>
           )}
-          <button className="auth-button" type="submit">
-            Kayıt Ol
+          <button className="auth-button" type="submit" disabled={loading}>
+            {loading ? "Kayıt yapılıyor..." : "Kayıt Ol"}
           </button>
           <button
             className="auth-button"

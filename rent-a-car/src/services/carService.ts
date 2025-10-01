@@ -1,5 +1,6 @@
 import { supabase } from "../lib/supabaseClient";
 import type { Car } from "../types/car";
+import myLoggerService from "./loggerService";
 
 // Tüm arabaları getir
 export const fetchAllCars = async (): Promise<Car[]> => {
@@ -39,7 +40,8 @@ export const fetchFilteredCars = async (
   const { data, error } = await query;
 
   if (error) {
-    console.error("Supabase hatası:", error);
+    console.error("Supabase error:", error);
+    myLoggerService.error("Failed to fetch filtered cars", error);
     throw new Error(error.message);
   }
 
@@ -47,7 +49,14 @@ export const fetchFilteredCars = async (
 };
 
 // Diğer servisler
-export const fetchCarById = async (id: number): Promise<Car | null> => {
+export const fetchCarById = async (id: string): Promise<Car | null> => {
+  // ID'nin geçerli bir UUID string olduğunu kontrol et
+  if (!id || typeof id !== "string" || id.trim() === "") {
+    const error = new Error("Invalid car ID");
+    myLoggerService.error("Invalid car ID provided", error);
+    throw error;
+  }
+
   const { data, error } = await supabase
     .from("cars")
     .select("*")

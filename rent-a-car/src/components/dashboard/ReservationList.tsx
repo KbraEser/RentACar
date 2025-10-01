@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "../../app/hooks/storeHooks";
 import type { RootState } from "../../store/store";
 import { fetchReservations } from "../../store/slices/rentalsSlice";
+import LoadingCard from "../common/LoadingCard";
 
 const ReservationList = () => {
   const dispatch = useAppDispatch();
@@ -19,23 +20,7 @@ const ReservationList = () => {
   if (loading) {
     return (
       <div className="space-y-6 m-10">
-        <div
-          className="rounded-lg shadow-lg p-6"
-          style={{ backgroundColor: "var(--color-white)" }}
-        >
-          <h1
-            className="text-2xl font-bold mb-4"
-            style={{ color: "var(--color-gray-800)" }}
-          >
-            Rezervasyonlarım
-          </h1>
-          <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto"></div>
-            <p className="mt-4" style={{ color: "var(--color-gray-600)" }}>
-              Rezervasyonlar yükleniyor...
-            </p>
-          </div>
-        </div>
+        <LoadingCard title="Rezervasyonlar yükleniyor..." />
       </div>
     );
   }

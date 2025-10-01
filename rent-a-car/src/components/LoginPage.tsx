@@ -1,10 +1,11 @@
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../app/hooks/storeHooks";
+import { useAppDispatch, useAppSelector } from "../app/hooks/storeHooks";
 import { signIn } from "../store/slices/authSlice";
 import { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { toast } from "react-toastify";
+import type { RootState } from "../store/store";
 
 interface LoginFormData {
   email: string;
@@ -15,6 +16,7 @@ const LoginPage = () => {
   const dispatch = useAppDispatch();
   const { register, handleSubmit } = useForm<LoginFormData>();
   const [showPassword, setShowPassword] = useState(false);
+  const loading = useAppSelector((state: RootState) => state.auth.loading);
 
   const onSubmit = async (data: LoginFormData) => {
     try {
@@ -57,8 +59,8 @@ const LoginPage = () => {
             )}
           </button>
         </div>
-        <button className=" auth-button" type="submit">
-          Giriş Yap
+        <button className="auth-button" type="submit" disabled={loading}>
+          {loading ? "Giriş yapılıyor..." : "Giriş Yap"}
         </button>
         <button
           className="auth-button"
