@@ -7,7 +7,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { toast } from "react-toastify";
 import { supabase } from "../lib/supabaseClient";
 import type { RootState } from "../store/store";
-import myLoggerService from "../services/loggerService";
+import { handleAndShowError } from "../utils/errorHandler";
 
 interface RegisterFormData {
   name: string;
@@ -34,16 +34,22 @@ const RegisterPage = () => {
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
 
   const isUserExists = async (email: string) => {
-    const { data, error } = await supabase
-      .from("users")
-      .select("*")
-      .eq("email", email);
-    if (error) {
-      console.error("User validation error:", error);
-      myLoggerService.error("Failed to validate user existence", error);
+    try {
+      const { data, error } = await supabase
+        .from("users")
+        .select("*")
+        .eq("email", email);
+
+      if (error) {
+        handleAndShowError(error, "RegisterPage.isUserExists");
+        return false;
+      }
+
+      return data && data.length > 0;
+    } catch (error) {
+      handleAndShowError(error, "RegisterPage.isUserExists");
       return false;
     }
-    return data && data.length > 0;
   };
 
   const onSubmit = async (data: RegisterFormData) => {
@@ -57,7 +63,7 @@ const RegisterPage = () => {
       const userExists = await isUserExists(data.email);
       if (userExists) {
         toast.error(
-          "Bu email adresi ile zaten kayıtlı bir kullanıcı bulunmaktadır. Lütfen giriş yapmayı deneyin."
+          "Bu email adresi ile zaten kayıtlı bir kullanıcı bulunmaktadır."
         );
         return;
       }
@@ -76,7 +82,7 @@ const RegisterPage = () => {
       reset();
       navigate("/auth/login");
     } catch (error) {
-      toast.error("Kayıt başarısız. Lütfen bilgilerinizi kontrol edin.");
+      handleAndShowError(error, "RegisterPage.onSubmit");
     }
   };
 

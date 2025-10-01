@@ -1,11 +1,13 @@
 import { supabase } from "../lib/supabaseClient";
 import type { Car } from "../types/car";
-import myLoggerService from "./loggerService";
+import { handleError, validateCarId } from "../utils/errorHandler";
 
 // Tüm arabaları getir
 export const fetchAllCars = async (): Promise<Car[]> => {
   const { data, error } = await supabase.from("cars").select("*");
-  if (error) throw new Error(error.message);
+  if (error) {
+    throw new Error(handleError(error, "CarService.fetchAllCars"));
+  }
   return data as Car[];
 };
 
@@ -40,9 +42,7 @@ export const fetchFilteredCars = async (
   const { data, error } = await query;
 
   if (error) {
-    console.error("Supabase error:", error);
-    myLoggerService.error("Failed to fetch filtered cars", error);
-    throw new Error(error.message);
+    throw new Error(handleError(error, "CarService.fetchFilteredCars"));
   }
 
   return data as Car[];
@@ -50,19 +50,23 @@ export const fetchFilteredCars = async (
 
 // Diğer servisler
 export const fetchCarById = async (id: string): Promise<Car | null> => {
-  // ID'nin geçerli bir UUID string olduğunu kontrol et
-  if (!id || typeof id !== "string" || id.trim() === "") {
-    const error = new Error("Invalid car ID");
-    myLoggerService.error("Invalid car ID provided", error);
-    throw error;
-  }
+  // ID validation
+  validateCarId(id);
 
   const { data, error } = await supabase
     .from("cars")
     .select("*")
     .eq("id", id)
     .single();
-  if (error) throw new Error(error.message);
+
+  if (error) {
+    if (error.code === "PGRST116") {
+      // No rows returned - car not found
+      throw new Error("Araç bulunamadı");
+    }
+    throw new Error(handleError(error, "CarService.fetchCarById"));
+  }
+
   return data as Car;
 };
 
@@ -71,6 +75,10 @@ export const fetchFeaturedCars = async (): Promise<Car[]> => {
     .from("cars")
     .select("*")
     .eq("is_featured", true);
-  if (error) throw new Error(error.message);
+
+  if (error) {
+    throw new Error(handleError(error, "CarService.fetchFeaturedCars"));
+  }
+
   return data as Car[];
 };

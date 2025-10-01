@@ -6,6 +6,7 @@ import { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { toast } from "react-toastify";
 import type { RootState } from "../store/store";
+import { handleAndShowError } from "../utils/errorHandler";
 
 interface LoginFormData {
   email: string;
@@ -24,7 +25,7 @@ const LoginPage = () => {
       toast.success("Giriş başarılı! Hoş geldiniz.");
       navigate("/dashboard");
     } catch (error) {
-      toast.error("Giriş başarısız. Email veya şifrenizi kontrol edin.");
+      handleAndShowError(error, "LoginPage.onSubmit");
     }
   };
 
