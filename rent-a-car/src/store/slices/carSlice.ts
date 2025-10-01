@@ -28,7 +28,7 @@ export const fetchCars = createAsyncThunk("cars/fetchCars", async () => {
 
 export const fetchCarById = createAsyncThunk(
   "cars/fetchCarById",
-  async (id: number) => {
+  async (id: string) => {
     return await fetchCarByIdService(id);
   }
 );

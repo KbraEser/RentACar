@@ -4,6 +4,14 @@ import { getCarImage } from "./utils/carImages";
 import { useEffect, useState, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { fetchFilteredCars } from "../services/carService";
+import {
+  CITIES,
+  CAR_MAKES,
+  FUEL_TYPES,
+  TRANSMISSION_TYPES,
+  PRICE_RANGES,
+} from "../constants";
+import LoadingCard from "./common/LoadingCard";
 
 interface FilterFormData {
   startDate: string;
@@ -23,7 +31,7 @@ function CarCard() {
 
   const { register, watch, reset, getValues } = useForm<FilterFormData>();
   const navigate = useNavigate();
-  // Filtreleme fonksiyonu - useCallback ile optimize edildi
+
   const applyFilters = useCallback(
     async (formData: FilterFormData) => {
       setLoading(true);
@@ -103,6 +111,15 @@ function CarCard() {
     }
   };
 
+  // Initial loading state - sadece araçlar yoksa göster
+  if (!initialCars || initialCars.length === 0) {
+    return (
+      <div className="mx-6">
+        <LoadingCard title="Araçlar yükleniyor..." />
+      </div>
+    );
+  }
+
   return (
     <div className="py-10 mx-6">
       <h2 className="text-xl font-bold mb-6">Araç Filtreleme</h2>
@@ -148,52 +165,47 @@ function CarCard() {
 
           <select {...register("city")} className="search-input">
             <option value="">Lokasyon Seçin</option>
-            <option value="İstanbul">İstanbul</option>
-            <option value="Ankara">Ankara</option>
-            <option value="İzmir">İzmir</option>
-            <option value="Bursa">Bursa</option>
-            <option value="Adana">Adana</option>
+            {CITIES.map((city) => (
+              <option key={city.value} value={city.value}>
+                {city.label}
+              </option>
+            ))}
           </select>
 
           <select {...register("make")} className="search-input">
             <option value="">Araç Markası</option>
-            <option value="alfaromeo">Alfa Romeo</option>
-            <option value="bmw">BMW</option>
-            <option value="chery">Chery</option>
-            <option value="citroen">Citroen</option>
-            <option value="ford">Ford</option>
-            <option value="honda">Honda</option>
-            <option value="jeep">Jeep</option>
-            <option value="mercedes">Mercedes</option>
-            <option value="nissan">Nissan</option>
-            <option value="ssangyong">SSangyong</option>
-            <option value="subaru">Subaru</option>
-            <option value="tesla">Tesla</option>
-            <option value="toyota">Toyota</option>
-            <option value="volkswagen">Volkswagen</option>
-            <option value="volvo">Volvo</option>
+            {CAR_MAKES.map((make) => (
+              <option key={make.value} value={make.value}>
+                {make.label}
+              </option>
+            ))}
           </select>
 
           <select {...register("fuel_type")} className="search-input">
             <option value="">Yakıt Tipi</option>
-            <option value="benzin">Benzin</option>
-            <option value="dizel">Dizel</option>
-            <option value="elektrik">Elektrik</option>
-            <option value="hybrid">Hybrid</option>
+            {FUEL_TYPES.map((fuel) => (
+              <option key={fuel.value} value={fuel.value}>
+                {fuel.label}
+              </option>
+            ))}
           </select>
 
           <select {...register("transmission")} className="search-input">
             <option value="">Vites Tipi</option>
-            <option value="otomatik">Otomatik</option>
-            <option value="manuel">Manuel</option>
+            {TRANSMISSION_TYPES.map((transmission) => (
+              <option key={transmission.value} value={transmission.value}>
+                {transmission.label}
+              </option>
+            ))}
           </select>
 
           <select {...register("minPrice")} className="search-input">
             <option value="">Fiyat Aralığı</option>
-            <option value="0">0-50</option>
-            <option value="50">50-100</option>
-            <option value="100">100-150</option>
-            <option value="150">150-200</option>
+            {PRICE_RANGES.map((price) => (
+              <option key={price.value} value={price.value}>
+                {price.label}
+              </option>
+            ))}
           </select>
 
           <button
