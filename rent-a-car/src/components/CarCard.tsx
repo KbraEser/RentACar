@@ -244,7 +244,15 @@ function CarCard() {
                 {car.fuel_type} • {car.seats} kişi • {car.transmission}
               </p>
               <button className="primary-button">Detaylı Bilgi</button>
-              <button className="secondary-button">Rezervasyon Yap</button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate(`/dashboard/reservationForm/${car.id}`);
+                }}
+                className="secondary-button"
+              >
+                Rezervasyon Yap
+              </button>
             </div>
           </div>
         ))}

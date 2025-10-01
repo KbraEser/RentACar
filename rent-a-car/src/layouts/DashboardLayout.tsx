@@ -2,6 +2,7 @@ import { useAppDispatch, useAppSelector } from "../app/hooks/storeHooks";
 import { signOut } from "../store/slices/authSlice";
 import { useState } from "react";
 import type { RootState } from "../store/store";
+import { Link } from "react-router-dom";
 
 const DashboardLayout = () => {
   const dispatch = useAppDispatch();
@@ -47,19 +48,19 @@ const DashboardLayout = () => {
           <div className="hidden md:flex items-center gap-6">
             <ul className="navbar-links">
               <li>
-                <a href="#" className="navbar-link">
+                <Link to="/dashboard/cars" className="navbar-link">
                   Araçlar
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="navbar-link">
+                <Link to="/dashboard/reservations" className="navbar-link">
                   Rezervasyonlarım
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="navbar-link">
+                <Link to="/dashboard/profile" className="navbar-link">
                   Profil
-                </a>
+                </Link>
               </li>
             </ul>
             <div className="flex items-center gap-4">
