@@ -1,10 +1,19 @@
 import { useLoaderData } from "react-router-dom";
 import { getCarImage } from "../utils/carImages";
 import type { Car } from "../../types/car";
-import { DELIVERY_LOCATIONS } from "../../constants";
+import { DELIVERY_LOCATIONS, CITIES } from "../../constants";
 
 const ReservationForm = () => {
   const car = useLoaderData() as Car;
+
+  const savedFilters = JSON.parse(localStorage.getItem("filters") || "{}");
+  const {
+    startDate: savedStartDate,
+    endDate: savedEndDate,
+    city: savedCity,
+  } = savedFilters;
+
+  const handleReservation = () => {};
 
   return (
     <div className="space-y-6 m-10">
@@ -56,10 +65,10 @@ const ReservationForm = () => {
               </div>
             </div>
 
-            <div className="bg-blue-50 p-4 rounded-lg">
+            <div className="bg-orange-50 p-4 rounded-lg">
               <div className="text-center">
                 <p className="text-gray-600 text-sm mb-1">Günlük Fiyat</p>
-                <p className="text-4xl font-bold text-blue-600">
+                <p className="text-4xl font-bold text-orange-600">
                   {car.price_per_day}₺
                 </p>
                 <p className="text-gray-500 text-sm">/gün</p>
@@ -78,8 +87,9 @@ const ReservationForm = () => {
                       Başlangıç Tarihi
                     </label>
                     <input
+                      value={savedStartDate || ""}
                       type="date"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                       required
                     />
                   </div>
@@ -88,8 +98,9 @@ const ReservationForm = () => {
                       Bitiş Tarihi
                     </label>
                     <input
+                      value={savedEndDate || ""}
                       type="date"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                       required
                     />
                   </div>
@@ -99,11 +110,25 @@ const ReservationForm = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Teslim Yeri
                   </label>
-                  <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="">Teslim yerini seçin</option>
+                  <select className="mb-4 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500">
+                    <option value="">Lokasyon seçin</option>
                     {DELIVERY_LOCATIONS.map((location) => (
                       <option key={location.value} value={location.value}>
                         {location.label}
+                      </option>
+                    ))}
+                  </select>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Lokasyon seçin
+                  </label>
+                  <select
+                    className="mb-4 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    defaultValue={savedCity || ""}
+                  >
+                    <option value="">Şehir seçin</option>
+                    {CITIES.map((city) => (
+                      <option key={city.value} value={city.value}>
+                        {city.label}
                       </option>
                     ))}
                   </select>
@@ -111,7 +136,8 @@ const ReservationForm = () => {
 
                 <button
                   type="submit"
-                  className="w-full bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium"
+                  className="w-full bg-orange-600 text-white py-3 px-4 rounded-md hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 font-medium"
+                  onClick={handleReservation}
                 >
                   Rezervasyonu Tamamla
                 </button>

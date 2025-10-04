@@ -39,13 +39,13 @@ export default function CarItem({ car }: CarItemProps) {
         <p className="text-sm text-gray-500 mb-4">
           {car.fuel_type} • {car.seats} kişi • {car.transmission}
         </p>
-        <div className="flex gap-2">
+        <div className="flex gap-2 ">
           <button className="primary-button flex-1">Detaylı Bilgi</button>
           <button
             onClick={handleReservationClick}
             className="secondary-button flex-1"
           >
-            Rezervasyon Yap
+            Rezervasyon
           </button>
         </div>
       </div>
