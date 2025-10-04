@@ -32,7 +32,7 @@ import CarDetailsModel from "../components/CarDetailsModal";
 import LoginPage from "../components/LoginPage";
 import RegisterPage from "../components/RegisterPage";
 import Dashboard from "../components/dashboard/Dashboard";
-import RezervationForm from "../components/dashboard/ReservationForm";
+import RezervationForm from "../components/dashboard/reservation/ReservationForm";
 export default createBrowserRouter([
   {
     path: "/",

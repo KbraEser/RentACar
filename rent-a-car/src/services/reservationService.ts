@@ -10,7 +10,8 @@ export const createReservationService = async (
   carId: string,
   startDate: string,
   endDate: string,
-  totalPrice: number
+  totalPrice: number,
+  city: string
 ) => {
   // Input validation
   validateInput(userId, "User ID");
@@ -18,7 +19,7 @@ export const createReservationService = async (
   validateInput(startDate, "Start Date");
   validateInput(endDate, "End Date");
   validateInput(totalPrice, "Total Price");
-
+  validateInput(city, "City");
   // Date range validation
   validateDateRange(startDate, endDate);
 
@@ -32,6 +33,7 @@ export const createReservationService = async (
         end_date: endDate,
         total_price: totalPrice,
         status: "active",
+        city: city,
       },
     ])
     .select();
@@ -49,7 +51,7 @@ export const fetchReservationsService = async (userId: string) => {
 
   const { data, error } = await supabase
     .from("rentals")
-    .select("id,user_id,car_id,start_date,end_date,total_price,status")
+    .select("id,user_id,car_id,start_date,end_date,total_price,status,city")
     .eq("user_id", userId);
 
   if (error) {

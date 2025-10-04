@@ -221,4 +221,120 @@ body {
   .auth-button {
     @apply mt-4 w-1/2 p-2 bg-orange-600 text-white rounded-md;
   }
+
+  /* Reservation Form Styles */
+  .reservation-container {
+    @apply space-y-6 m-10;
+  }
+
+  .reservation-card {
+    background-color: var(--color-white);
+    @apply rounded-lg shadow-lg p-6;
+  }
+
+  .reservation-title {
+    color: var(--color-gray-800);
+    @apply text-2xl font-bold mb-6;
+  }
+
+  .reservation-grid {
+    @apply grid grid-cols-1 lg:grid-cols-2 gap-8;
+  }
+
+  .reservation-image-container {
+    @apply flex justify-center items-center;
+  }
+
+  .reservation-image {
+    @apply w-full max-w-lg rounded-lg shadow-xl;
+  }
+
+  .reservation-content {
+    @apply space-y-6;
+  }
+
+  .reservation-car-title {
+    color: var(--color-gray-800);
+    @apply text-3xl font-bold mb-2;
+  }
+
+  .reservation-car-year {
+    color: var(--color-gray-600);
+    @apply text-lg;
+  }
+
+  .reservation-details {
+    @apply space-y-3;
+  }
+
+  .reservation-detail-row {
+    @apply flex justify-between items-center py-2 border-b border-gray-200;
+  }
+
+  .reservation-detail-label {
+    color: var(--color-gray-600);
+    @apply font-medium;
+  }
+
+  .reservation-detail-value {
+    color: var(--color-gray-800);
+  }
+
+  .reservation-price-container {
+    background-color: #fef3e2;
+    @apply p-4 rounded-lg;
+  }
+
+  .reservation-price-label {
+    color: var(--color-gray-600);
+    @apply text-sm mb-1 text-center;
+  }
+
+  .reservation-price-value {
+    color: var(--color-orange-600);
+    @apply text-4xl font-bold;
+  }
+
+  .reservation-price-per-day {
+    color: var(--color-gray-500);
+    @apply text-sm;
+  }
+
+  .reservation-form-section {
+    @apply space-y-4;
+  }
+
+  .reservation-form-title {
+    color: var(--color-gray-800);
+    @apply text-xl font-semibold;
+  }
+
+  .reservation-form-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-4;
+  }
+
+  .reservation-form-group {
+    @apply block;
+  }
+
+  .reservation-form-label {
+    color: var(--color-gray-700);
+    @apply text-sm font-medium mb-1 block;
+  }
+
+  .reservation-form-input {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500;
+  }
+
+  .reservation-form-select {
+    @apply mb-4 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500;
+  }
+
+  .reservation-form-button {
+    @apply w-full bg-orange-600 text-white py-3 px-4 rounded-md hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 font-medium;
+  }
+
+  .reservation-form-button:disabled {
+    @apply bg-gray-400 cursor-not-allowed;
+  }
 }

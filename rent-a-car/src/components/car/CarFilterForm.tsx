@@ -8,6 +8,7 @@ import {
   PRICE_RANGES,
 } from "../../constants";
 import { useEffect, useRef } from "react";
+import { getMinDate, getTodayString } from "../utils/dataUtils";
 
 export interface FilterFormData {
   startDate: string;
@@ -112,7 +113,7 @@ export default function CarFilterForm({
           type="date"
           placeholder="Başlangıç Tarihi"
           className="search-input"
-          min={watch("startDate") || new Date().toISOString().split("T")[0]}
+          min={getTodayString()}
         />
 
         <input
@@ -120,7 +121,7 @@ export default function CarFilterForm({
           type="date"
           placeholder="Bitiş Tarihi"
           className="search-input"
-          min={watch("startDate") || new Date().toISOString().split("T")[0]}
+          min={getMinDate(watch("startDate"))}
         />
 
         <select {...register("city")} className="search-input">
@@ -167,14 +168,6 @@ export default function CarFilterForm({
             </option>
           ))}
         </select>
-        {/* <button
-          type="button"
-          className="primary-button"
-          disabled={loading}
-          onClick={handleApplyFilters}
-        >
-          {loading ? "Yükleniyor..." : "Uygula"}
-        </button> */}
 
         <button
           type="button"

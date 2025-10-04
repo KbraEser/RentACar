@@ -15,6 +15,7 @@ interface Rentals {
   status: string;
   created_at: string;
   updated_at: string;
+  city: string;
 }
 
 interface RentalsState {
@@ -44,7 +45,8 @@ export const createReservation = createAsyncThunk(
       reservations.car_id,
       reservations.start_date,
       reservations.end_date,
-      reservations.total_price
+      reservations.total_price,
+      reservations.city
     );
   }
 );
