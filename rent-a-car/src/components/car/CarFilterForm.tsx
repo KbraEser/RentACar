@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+
 import {
   CITIES,
   CAR_MAKES,
@@ -7,6 +7,7 @@ import {
   TRANSMISSION_TYPES,
   PRICE_RANGES,
 } from "../../constants";
+import { useEffect, useRef } from "react";
 
 export interface FilterFormData {
   startDate: string;
@@ -14,7 +15,7 @@ export interface FilterFormData {
   city: string;
   make: string;
   fuel_type: string;
-  minPrice: string;
+  priceRange: string;
   transmission: string;
 }
 
@@ -29,61 +30,80 @@ export default function CarFilterForm({
   onClearFilters,
   loading = false,
 }: CarFilterFormProps) {
-  const { register, reset, getValues } = useForm<FilterFormData>();
-  const [startDate, setStartDate] = useState<string>("");
+  const { register, reset, watch } = useForm<FilterFormData>({
+    defaultValues: {
+      startDate: "",
+      endDate: "",
+      city: "",
+      make: "",
+      fuel_type: "",
+      priceRange: "",
+      transmission: "",
+    },
+  });
 
-  const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setStartDate(e.target.value);
+  // Her bir değeri ayrı ayrı izle (obje referans problemi çözümü)
+  const startDate = watch("startDate");
+  const endDate = watch("endDate");
+  const city = watch("city");
+  const make = watch("make");
+  const fuelType = watch("fuel_type");
+  const priceRange = watch("priceRange");
+  const transmission = watch("transmission");
 
-    const currentValues = getValues();
-    if (
-      currentValues.endDate &&
-      e.target.value &&
-      currentValues.endDate < e.target.value
-    ) {
-      currentValues.endDate = "";
-      reset({
-        ...currentValues,
-        endDate: "",
-      });
+  const onFiltersMChangeRef = useRef(onFiltersChange);
+  const onClearFiltersRef = useRef(onClearFilters);
+
+  onFiltersMChangeRef.current = onFiltersChange;
+  onClearFiltersRef.current = onClearFilters;
+
+  // Debounce için timer ref
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    // Önceki timer'ı temizle
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
     }
 
-    // Form değerini güncelle ve filtreleri uygula
-    const updatedValues = {
-      ...currentValues,
-      startDate: e.target.value,
+    // 500ms bekle, ardından filtreleri uygula
+    debounceTimerRef.current = setTimeout(() => {
+      const formData: FilterFormData = {
+        startDate,
+        endDate,
+        city,
+        make,
+        fuel_type: fuelType,
+        priceRange,
+        transmission,
+      };
+
+      const hasAnyValue = Object.values(formData).some(
+        (value) => value && value.toString().trim() !== ""
+      );
+
+      if (hasAnyValue) {
+        onFiltersMChangeRef.current(formData);
+        localStorage.setItem("filters", JSON.stringify(formData));
+      }
+    }, 500);
+
+    // Cleanup
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
     };
-    onFiltersChange(updatedValues);
-  };
+  }, [startDate, endDate, city, make, fuelType, priceRange, transmission]);
 
-  const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const currentValues = getValues();
-    const selectedEndDate = e.target.value;
-
-    if (startDate && selectedEndDate && selectedEndDate < startDate) {
-      alert("Bitiş tarihi başlangıç tarihinden önce olamaz!");
-      e.target.value = "";
-      return;
-    }
-
-    const updatedValues = {
-      ...currentValues,
-      endDate: selectedEndDate,
-    };
-    onFiltersChange(updatedValues);
-  };
-
-  const handleFilterChange = () => {
-    const currentValues = getValues();
-    onFiltersChange(currentValues);
-  };
+  // const handleApplyFilters = () => {
+  //   onFiltersChange(getValues());
+  // };
 
   const handleClearFilters = () => {
     reset();
-    setStartDate("");
     onClearFilters();
   };
-
   return (
     <form className="bg-white p-6 rounded-lg shadow-lg mb-8">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -92,8 +112,7 @@ export default function CarFilterForm({
           type="date"
           placeholder="Başlangıç Tarihi"
           className="search-input"
-          min={new Date().toISOString().split("T")[0]}
-          onChange={handleStartDateChange}
+          min={watch("startDate") || new Date().toISOString().split("T")[0]}
         />
 
         <input
@@ -101,15 +120,10 @@ export default function CarFilterForm({
           type="date"
           placeholder="Bitiş Tarihi"
           className="search-input"
-          min={startDate || new Date().toISOString().split("T")[0]}
-          onChange={handleEndDateChange}
+          min={watch("startDate") || new Date().toISOString().split("T")[0]}
         />
 
-        <select
-          {...register("city")}
-          className="search-input"
-          onChange={handleFilterChange}
-        >
+        <select {...register("city")} className="search-input">
           <option value="">Lokasyon Seçin</option>
           {CITIES.map((city) => (
             <option key={city.value} value={city.value}>
@@ -118,11 +132,7 @@ export default function CarFilterForm({
           ))}
         </select>
 
-        <select
-          {...register("make")}
-          className="search-input"
-          onChange={handleFilterChange}
-        >
+        <select {...register("make")} className="search-input">
           <option value="">Araç Markası</option>
           {CAR_MAKES.map((make) => (
             <option key={make.value} value={make.value}>
@@ -131,11 +141,7 @@ export default function CarFilterForm({
           ))}
         </select>
 
-        <select
-          {...register("fuel_type")}
-          className="search-input"
-          onChange={handleFilterChange}
-        >
+        <select {...register("fuel_type")} className="search-input">
           <option value="">Yakıt Tipi</option>
           {FUEL_TYPES.map((fuel) => (
             <option key={fuel.value} value={fuel.value}>
@@ -144,11 +150,7 @@ export default function CarFilterForm({
           ))}
         </select>
 
-        <select
-          {...register("transmission")}
-          className="search-input"
-          onChange={handleFilterChange}
-        >
+        <select {...register("transmission")} className="search-input">
           <option value="">Vites Tipi</option>
           {TRANSMISSION_TYPES.map((transmission) => (
             <option key={transmission.value} value={transmission.value}>
@@ -157,11 +159,7 @@ export default function CarFilterForm({
           ))}
         </select>
 
-        <select
-          {...register("minPrice")}
-          className="search-input"
-          onChange={handleFilterChange}
-        >
+        <select {...register("priceRange")} className="search-input">
           <option value="">Fiyat Aralığı</option>
           {PRICE_RANGES.map((price) => (
             <option key={price.value} value={price.value}>
@@ -169,12 +167,20 @@ export default function CarFilterForm({
             </option>
           ))}
         </select>
+        {/* <button
+          type="button"
+          className="primary-button"
+          disabled={loading}
+          onClick={handleApplyFilters}
+        >
+          {loading ? "Yükleniyor..." : "Uygula"}
+        </button> */}
 
         <button
           type="button"
-          onClick={handleClearFilters}
           className="primary-button"
           disabled={loading}
+          onClick={handleClearFilters}
         >
           {loading ? "Yükleniyor..." : "Temizle"}
         </button>

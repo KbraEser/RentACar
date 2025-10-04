@@ -11,28 +11,33 @@ export const fetchAllCars = async (): Promise<Car[]> => {
   return data as Car[];
 };
 
-// Filtrelenmiş arabaları getir - tek fonksiyonla tüm filtreleri yönet
+// Filtrelenmiş arabaları getir
 export const fetchFilteredCars = async (
   filters: Record<string, any>
 ): Promise<Car[]> => {
   let query = supabase.from("cars").select("*");
 
-  // Dinamik filtreleme
   Object.entries(filters).forEach(([key, value]) => {
     if (value !== undefined && value !== "" && value !== null) {
-      if (Array.isArray(value) && value.length > 0) {
+      if (key === "startDate") {
+        // kiralama başlangıcı => car.available_from >= startDate
+        query = query.gte("available_from", value);
+      } else if (key === "endDate") {
+        // kiralama bitişi => car.available_to <= endDate
+        query = query.lte("available_to", value);
+      } else if (key === "minPrice") {
+        // Minimum fiyat filtresi
+        const priceValue = typeof value === "string" ? parseInt(value) : value;
+        query = query.gte("price_per_day", priceValue);
+      } else if (key === "maxPrice") {
+        const priceValue = typeof value === "string" ? parseInt(value) : value;
+        query = query.lte("price_per_day", priceValue);
+      } else if (Array.isArray(value) && value.length > 0) {
         query = query.in(key, value);
-      } else if (typeof value === "number") {
-        if (key === "min_price") {
-          query = query.gte("price_per_day", value);
-        } else if (key === "max_price") {
-          query = query.lte("price_per_day", value);
-        } else {
-          query = query.eq(key, value);
-        }
       } else if (typeof value === "string") {
-        // String değerler için case-insensitive arama
-        query = query.ilike(key, `%${value}%`);
+        // String değerler için case-insensitive exact match
+        // ilike kullanarak case-insensitive arama yapıyoruz
+        query = query.ilike(key, value);
       } else {
         query = query.eq(key, value);
       }

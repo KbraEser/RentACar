@@ -4,7 +4,7 @@ import LoadingCard from "./common/LoadingCard";
 import CarFilterForm from "./car/CarFilterForm";
 import CarFilterResults from "./car/CarFilterResults";
 import CarGrid from "./car/CarGrid";
-import { useCarFilter } from "../hooks/useCarFilter";
+import { useCarFilter } from "../app/hooks/useCarFilter";
 
 function CarCard() {
   const initialCars = useLoaderData() as Car[];

@@ -12,7 +12,6 @@ export const CITIES = [
 
 // Araç markaları
 export const CAR_MAKES = [
-  { value: "alfaromeo", label: "Alfa Romeo" },
   { value: "bmw", label: "BMW" },
   { value: "chery", label: "Chery" },
   { value: "citroen", label: "Citroen" },
@@ -45,11 +44,11 @@ export const TRANSMISSION_TYPES = [
 
 // Fiyat aralıkları
 export const PRICE_RANGES = [
-  { value: "0", label: "0-50₺" },
-  { value: "50", label: "50-100₺" },
-  { value: "100", label: "100-150₺" },
-  { value: "150", label: "150-200₺" },
-  { value: "200", label: "200₺+" },
+  { value: "0-50", label: "0-50₺", min: 0, max: 50 },
+  { value: "50-100", label: "50-100₺" },
+  { value: "100-150", label: "100-150₺", min: 100, max: 150 },
+  { value: "150-200", label: "150-200₺", min: 150, max: 200 },
+  { value: "200-999", label: "200₺+", min: 200, max: 999 },
 ] as const;
 
 // Teslim yerleri
