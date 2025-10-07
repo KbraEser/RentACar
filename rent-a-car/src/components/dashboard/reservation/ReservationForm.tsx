@@ -20,12 +20,12 @@ export interface ReservationFormData {
 
 const ReservationForm = () => {
   const carData = useLoaderData();
-  
+
   // Eğer car null ise veya city null ise handle et
   console.log("Loader data:", carData);
-  
+
   const car = carData as Car;
-  
+
   // Car veya city null ise early return
   if (!car) {
     return <div>Araç bilgisi yüklenemedi</div>;
@@ -34,7 +34,7 @@ const ReservationForm = () => {
   console.log("Car object:", car);
   console.log("Car city:", car.city);
   console.log("All car keys:", Object.keys(car));
-  
+
   const user = useSelector((state: RootState) => state.auth.user);
   const navigate = useNavigate();
 
