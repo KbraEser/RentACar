@@ -3,43 +3,56 @@ import { getCarImage } from "../../utils/carImages";
 import type { Car } from "../../../types/car";
 import { DELIVERY_LOCATIONS, CITIES } from "../../../constants";
 import { useForm } from "react-hook-form";
-import { createReservation } from "../../../store/slices/rentalsSlice";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../../store/store";
 import { getMinDate, getTodayString } from "../../utils/dataUtils";
 import { validateAndResetEndDate } from "../../utils/dataUtils";
+import { createReservation } from "../../../store/slices/rentalsSlice";
+import { useAppDispatch } from "../../../app/hooks/storeHooks";
+import { handleAndShowError } from "../../../utils/errorHandler";
 
 export interface ReservationFormData {
   startDate: string;
   endDate: string;
-  city: string;
   totalPrice: number;
 }
 
 const ReservationForm = () => {
-  const car = useLoaderData() as Car;
+  const carData = useLoaderData();
+  
+  // Eğer car null ise veya city null ise handle et
+  console.log("Loader data:", carData);
+  
+  const car = carData as Car;
+  
+  // Car veya city null ise early return
+  if (!car) {
+    return <div>Araç bilgisi yüklenemedi</div>;
+  }
+
+  console.log("Car object:", car);
+  console.log("Car city:", car.city);
+  console.log("All car keys:", Object.keys(car));
+  
   const user = useSelector((state: RootState) => state.auth.user);
+  const navigate = useNavigate();
 
   const savedFilters = JSON.parse(localStorage.getItem("filters") || "{}");
-  const {
-    startDate: savedStartDate,
-    endDate: savedEndDate,
-    city: savedCity,
-  } = savedFilters;
+  const { startDate: savedStartDate, endDate: savedEndDate } = savedFilters;
 
   const { register, watch, setValue } = useForm<ReservationFormData>({
     defaultValues: {
       startDate: savedStartDate || "",
       endDate: savedEndDate || "",
-      city: savedCity || "",
+
       totalPrice: 0,
     },
   });
 
   const startDate = watch("startDate");
   const endDate = watch("endDate");
-  const city = watch("city");
+
   const totalPrice = watch("totalPrice");
 
   useEffect(() => {
@@ -53,17 +66,8 @@ const ReservationForm = () => {
     }
   }, [startDate, endDate, car.price_per_day]);
 
-  const handleReservation = () => {
-    createReservation({
-      start_date: startDate,
-      end_date: endDate,
-      city: city,
-      user_id: user?.id || "",
-      total_price: totalPrice,
-      car_id: car.id,
-      status: "active",
-    });
-  };
+  const dispatch = useAppDispatch();
+
   return (
     <div className="reservation-container">
       <div className="reservation-card">
@@ -98,6 +102,10 @@ const ReservationForm = () => {
                 <span className="reservation-detail-value">
                   {car.transmission}
                 </span>
+              </div>
+              <div className="reservation-detail-row">
+                <span className="reservation-detail-label">Şehir:</span>
+                <span className="reservation-detail-value">{car.city}</span>
               </div>
               <div className="reservation-detail-row">
                 <span className="reservation-detail-label">Kapasite:</span>
@@ -166,26 +174,34 @@ const ReservationForm = () => {
                       </option>
                     ))}
                   </select>
-                  <label className="reservation-form-label">
-                    Lokasyon seçin
-                  </label>
-                  <select
-                    className="reservation-form-select"
-                    defaultValue={savedCity || ""}
-                  >
-                    <option value="">Şehir seçin</option>
-                    {CITIES.map((city) => (
-                      <option key={city.value} value={city.value}>
-                        {city.label}
-                      </option>
-                    ))}
-                  </select>
                 </div>
 
                 <button
-                  type="submit"
+                  type="button"
                   className="w-full bg-orange-600 text-white py-3 px-4 rounded-md hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 font-medium"
-                  disabled={!startDate || !endDate || !city || !totalPrice}
+                  disabled={!startDate || !endDate || !totalPrice}
+                  onClick={() => {
+                    dispatch(
+                      createReservation({
+                        reservation: {
+                          user_id: user?.id || "",
+                          car_id: car.id,
+                          start_date: startDate,
+                          end_date: endDate,
+                          total_price: totalPrice,
+                          status: "active",
+                          city: car.city,
+                        },
+                        car: car,
+                      })
+                    )
+                      .then(() => {
+                        navigate("/dashboard");
+                      })
+                      .catch((error) => {
+                        handleAndShowError(error, "ReservationForm.onClick");
+                      });
+                  }}
                 >
                   Rezervasyonu Tamamla
                 </button>

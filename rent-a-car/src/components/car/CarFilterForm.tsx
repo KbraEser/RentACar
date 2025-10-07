@@ -8,7 +8,11 @@ import {
   PRICE_RANGES,
 } from "../../constants";
 import { useEffect, useRef } from "react";
-import { getMinDate, getTodayString } from "../utils/dataUtils";
+import {
+  getMinDate,
+  getTodayString,
+  validateAndResetEndDate,
+} from "../utils/dataUtils";
 
 export interface FilterFormData {
   startDate: string;
@@ -31,7 +35,7 @@ export default function CarFilterForm({
   onClearFilters,
   loading = false,
 }: CarFilterFormProps) {
-  const { register, reset, watch } = useForm<FilterFormData>({
+  const { register, reset, watch, setValue } = useForm<FilterFormData>({
     defaultValues: {
       startDate: "",
       endDate: "",
@@ -62,6 +66,7 @@ export default function CarFilterForm({
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
+    validateAndResetEndDate(startDate, endDate, setValue);
     // Önceki timer'ı temizle
     if (debounceTimerRef.current) {
       clearTimeout(debounceTimerRef.current);

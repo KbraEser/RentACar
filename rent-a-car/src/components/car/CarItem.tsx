@@ -8,7 +8,7 @@ interface CarItemProps {
 
 export default function CarItem({ car }: CarItemProps) {
   const navigate = useNavigate();
-
+  console.log("Car item city:", car.city);
   const handleCardClick = () => {
     navigate(`/cars/carsDetail/${car.id}`);
   };
@@ -39,6 +39,7 @@ export default function CarItem({ car }: CarItemProps) {
         <p className="text-sm text-gray-500 mb-4">
           {car.fuel_type} • {car.seats} kişi • {car.transmission}
         </p>
+        <p className="text-sm text-gray-500 mb-4">{car.city}</p>
         <div className="flex gap-2 ">
           <button className="primary-button flex-1">Detaylı Bilgi</button>
           <button

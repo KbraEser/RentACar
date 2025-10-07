@@ -5,6 +5,7 @@ import DashboardLayout from "../layouts/DashboardLayout";
 import ProtectedRoute from "./ProtectedRoute";
 // import ErrorPage from "../pages/ErrorPage";
 import HomePage from "../components/HomePage";
+
 import {
   fetchAllCars,
   fetchFeaturedCars,
@@ -33,6 +34,8 @@ import LoginPage from "../components/LoginPage";
 import RegisterPage from "../components/RegisterPage";
 import Dashboard from "../components/dashboard/Dashboard";
 import RezervationForm from "../components/dashboard/reservation/ReservationForm";
+import ReservationSuccess from "../components/dashboard/reservation/ReservationSuccess";
+
 export default createBrowserRouter([
   {
     path: "/",
@@ -102,7 +105,14 @@ export default createBrowserRouter([
         path: "reservationForm/:id",
         element: <RezervationForm />,
         loader: carLoader,
+        children: [
+          {
+            path: "reservationSuccess",
+            element: <ReservationSuccess />,
+          },
+        ],
       },
+
       // {
       //   path: "reservations",
       //   element: <ReservationList />,
