@@ -1,8 +1,8 @@
 import { useEffect } from "react";
-import { useAppSelector, useAppDispatch } from "../../app/hooks/storeHooks";
-import type { RootState } from "../../store/store";
-import { fetchReservations } from "../../store/slices/rentalsSlice";
-import LoadingCard from "../common/LoadingCard";
+import { useAppSelector, useAppDispatch } from "../../../app/hooks/storeHooks";
+import type { RootState } from "../../../store/store";
+import { fetchReservations } from "../../../store/slices/rentalsSlice";
+import LoadingCard from "../../common/LoadingCard";
 
 const ReservationList = () => {
   const dispatch = useAppDispatch();

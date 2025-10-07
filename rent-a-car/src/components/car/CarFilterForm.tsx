@@ -8,6 +8,11 @@ import {
   PRICE_RANGES,
 } from "../../constants";
 import { useEffect, useRef } from "react";
+import {
+  getMinDate,
+  getTodayString,
+  validateAndResetEndDate,
+} from "../utils/dataUtils";
 
 export interface FilterFormData {
   startDate: string;
@@ -30,7 +35,7 @@ export default function CarFilterForm({
   onClearFilters,
   loading = false,
 }: CarFilterFormProps) {
-  const { register, reset, watch } = useForm<FilterFormData>({
+  const { register, reset, watch, setValue } = useForm<FilterFormData>({
     defaultValues: {
       startDate: "",
       endDate: "",
@@ -61,6 +66,7 @@ export default function CarFilterForm({
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
+    validateAndResetEndDate(startDate, endDate, setValue);
     // Önceki timer'ı temizle
     if (debounceTimerRef.current) {
       clearTimeout(debounceTimerRef.current);
@@ -112,7 +118,7 @@ export default function CarFilterForm({
           type="date"
           placeholder="Başlangıç Tarihi"
           className="search-input"
-          min={watch("startDate") || new Date().toISOString().split("T")[0]}
+          min={getTodayString()}
         />
 
         <input
@@ -120,7 +126,7 @@ export default function CarFilterForm({
           type="date"
           placeholder="Bitiş Tarihi"
           className="search-input"
-          min={watch("startDate") || new Date().toISOString().split("T")[0]}
+          min={getMinDate(watch("startDate"))}
         />
 
         <select {...register("city")} className="search-input">
@@ -167,14 +173,6 @@ export default function CarFilterForm({
             </option>
           ))}
         </select>
-        {/* <button
-          type="button"
-          className="primary-button"
-          disabled={loading}
-          onClick={handleApplyFilters}
-        >
-          {loading ? "Yükleniyor..." : "Uygula"}
-        </button> */}
 
         <button
           type="button"
