@@ -6,7 +6,6 @@ import {
   AiOutlineCalendar,
   AiOutlinePlus,
   AiOutlineUser,
-  AiOutlineFileText,
 } from "react-icons/ai";
 import { fetchFeaturedCars } from "../../store/slices/carSlice";
 import LoadingCard from "../common/LoadingCard";
@@ -29,7 +28,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="space-y-6 m-10">
+    <div className="space-y-10 m-10 mt-20">
       {/* Header */}
       <div className="rounded-lg shadow-lg p-6 bg-white">
         <h1 className="text-2xl font-bold mb-2 text-gray-800">
@@ -43,7 +42,7 @@ const Dashboard = () => {
       {/* Quick Actions */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <NavLink
-          to="/dashboard/reservations"
+          to="/dashboard/reservation"
           className="rounded-lg shadow-md p-4 hover:shadow-lg transition-all duration-300 border bg-white border-gray-300 hover:border-orange-500"
         >
           <div className="flex items-center space-x-4">
@@ -54,7 +53,9 @@ const Dashboard = () => {
               <h3 className="text-lg font-semibold text-gray-800">
                 Rezervasyonlarım
               </h3>
-              <p className="text-sm text-gray-600">Aktif rezervasyonlar</p>
+              <p className="text-sm text-gray-600">
+                Aktif rezervasyonları takip et
+              </p>
             </div>
           </div>
         </NavLink>
@@ -69,7 +70,7 @@ const Dashboard = () => {
             </div>
             <div>
               <h3 className="text-lg font-semibold text-gray-800">
-                Yeni Araç Kiralama
+                Araç Kiralama
               </h3>
               <p className="text-sm text-gray-600">Mevcut araçları incele</p>
             </div>
@@ -90,34 +91,6 @@ const Dashboard = () => {
             </div>
           </div>
         </NavLink>
-      </div>
-
-      {/* Recent Reservations */}
-      <div className="rounded-lg shadow-lg bg-white">
-        <div className="p-4 border-b border-gray-300">
-          <h2 className="text-lg font-semibold text-gray-800">
-            Aktif Rezervasyonlar
-          </h2>
-        </div>
-        <div className="p-4">
-          <div className="text-center py-8">
-            <AiOutlineFileText className="mx-auto h-12 w-12 text-gray-400" />
-            <h3 className="mt-2 text-sm font-medium text-gray-800">
-              Henüz rezervasyon yok
-            </h3>
-            <p className="mt-1 text-sm text-gray-500">
-              İlk rezervasyonunuzu yapmak için araçları inceleyin.
-            </p>
-            <div className="mt-6">
-              <NavLink
-                to="/dashboard/cars"
-                className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white transition-colors bg-orange-600 border-orange-600 hover:bg-orange-500"
-              >
-                Araçları İncele
-              </NavLink>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );

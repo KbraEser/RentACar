@@ -34,3 +34,35 @@ export const createReservationService = async (
   }
   return data;
 };
+
+export const fetchRentalsService = async (user_id: string) => {
+  const { data, error } = await supabase
+    .from("rentals")
+    .select("*")
+    .eq("user_id", user_id);
+
+  if (error) {
+    console.error("Supabase error in fetchRentalsService:", error);
+    throw new Error(
+      handleError(error, "ReservationService.fetchRentalsService")
+    );
+  }
+  return data;
+};
+
+export const cancelReservationService = async (id: string) => {
+  console.log("Cancelling reservation with ID:", id, "Type:", typeof id);
+  const { data, error } = await supabase
+    .from("rentals")
+    .update({ status: "cancelled" })
+    .eq("id", id)
+    .select();
+  console.log("Supabase response:", { data, error });
+  if (error) {
+    console.error("Supabase error in cancelReservationService:", error);
+    throw new Error(
+      handleError(error, "ReservationService.cancelReservationService")
+    );
+  }
+  return data;
+};

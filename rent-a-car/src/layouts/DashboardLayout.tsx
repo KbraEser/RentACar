@@ -48,12 +48,17 @@ const DashboardLayout = () => {
           <div className="hidden md:flex items-center gap-6">
             <ul className="navbar-links">
               <li>
+                <Link to="/dashboard" className="navbar-link">
+                  Dashboard
+                </Link>
+              </li>
+              <li>
                 <Link to="/dashboard/cars" className="navbar-link">
                   Araçlar
                 </Link>
               </li>
               <li>
-                <Link to="/dashboard/reservations" className="navbar-link">
+                <Link to="/dashboard/reservation" className="navbar-link">
                   Rezervasyonlarım
                 </Link>
               </li>

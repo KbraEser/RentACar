@@ -1,19 +1,20 @@
 import { useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "../../../app/hooks/storeHooks";
 import type { RootState } from "../../../store/store";
-import { fetchReservations } from "../../../store/slices/rentalsSlice";
+import { fetchRentals } from "../../../store/slices/rentalsSlice";
 import LoadingCard from "../../common/LoadingCard";
-
+import { cancelReservation } from "../../../store/slices/rentalsSlice";
 const ReservationList = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state: RootState) => state.auth.user);
-  const { reservations, loading, error } = useAppSelector(
+  const { rentals, loading, error } = useAppSelector(
     (state: RootState) => state.rentals
   );
 
   useEffect(() => {
     if (user) {
-      dispatch(fetchReservations(user.id));
+      dispatch(fetchRentals(user.id));
+    } else {
     }
   }, [dispatch, user]);
 
@@ -69,9 +70,9 @@ const ReservationList = () => {
     );
   }
 
-  if (reservations.length === 0) {
+  if (rentals.length === 0) {
     return (
-      <div className="space-y-6 m-10">
+      <div className="space-y-6 m-8">
         <div
           className="rounded-lg shadow-lg p-6"
           style={{ backgroundColor: "var(--color-white)" }}
@@ -124,8 +125,8 @@ const ReservationList = () => {
         >
           Rezervasyonlarım
         </h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {reservations.map((reservation) => (
+        <div className="w-full">
+          {rentals.map((reservation) => (
             <div
               key={reservation.id}
               className="border rounded-lg p-4"
@@ -157,13 +158,13 @@ const ReservationList = () => {
                 Durum: {reservation.status}
               </p>
               <button
+                disabled={reservation.status === "cancelled"}
                 className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
                 onClick={() => {
-                  // İptal etme fonksiyonu burada olacak
-                  alert("İptal etme özelliği yakında eklenecek!");
+                  dispatch(cancelReservation(reservation.id as string));
                 }}
               >
-                İptal Et
+                {reservation.status === "active" ? "İptal Et" : "İptal Edildi"}
               </button>
             </div>
           ))}

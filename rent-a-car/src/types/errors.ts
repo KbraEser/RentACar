@@ -15,7 +15,7 @@ export const ERROR_MESSAGES = {
   RESERVATION_CREATE_FAILED:
     "Rezervasyon oluşturulamadı. Lütfen tekrar deneyin.",
   RESERVATION_FETCH_FAILED: "Rezervasyonlar yüklenemedi.",
-
+  RESERVATION_CANCEL_FAILED: "Rezervasyon iptal edilemedi.",
   // Network Errors
   NETWORK_ERROR: "Ağ bağlantısı hatası. İnternet bağlantınızı kontrol edin.",
 

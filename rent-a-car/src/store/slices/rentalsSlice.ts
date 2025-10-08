@@ -1,5 +1,9 @@
 import type { Rentals } from "../../types/rentals";
-import { createReservationService } from "../../services/reservationService";
+import {
+  cancelReservationService,
+  createReservationService,
+  fetchRentalsService,
+} from "../../services/reservationService";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { ERROR_MESSAGES } from "../../types/errors";
 import type { Car } from "../../types/car";
@@ -23,6 +27,20 @@ export const createReservation = createAsyncThunk(
   }
 );
 
+export const fetchRentals = createAsyncThunk(
+  "rentals/fetchRentals",
+  async (user_id: string) => {
+    return await fetchRentalsService(user_id);
+  }
+);
+
+export const cancelReservation = createAsyncThunk(
+  "rentals/cancelReservation",
+  async (id: string) => {
+    return await cancelReservationService(id);
+  }
+);
+
 const rentalsSlice = createSlice({
   name: "rentals",
   initialState,
@@ -41,6 +59,36 @@ const rentalsSlice = createSlice({
         state.loading = false;
         state.error =
           action.error.message || ERROR_MESSAGES.RESERVATION_CREATE_FAILED;
+      })
+      .addCase(fetchRentals.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchRentals.fulfilled, (state, action) => {
+        state.loading = false;
+        state.rentals = action.payload;
+      })
+      .addCase(fetchRentals.rejected, (state, action) => {
+        state.loading = false;
+        state.error =
+          action.error.message || ERROR_MESSAGES.RESERVATION_FETCH_FAILED;
+      })
+      .addCase(cancelReservation.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(cancelReservation.fulfilled, (state, action) => {
+        state.loading = false;
+        const cancelledId = action.meta.arg;
+
+        state.rentals = state.rentals.filter(
+          (rental) => rental.id !== cancelledId
+        );
+      })
+      .addCase(cancelReservation.rejected, (state, action) => {
+        state.loading = false;
+        state.error =
+          action.error.message || ERROR_MESSAGES.RESERVATION_CANCEL_FAILED;
       });
   },
 });

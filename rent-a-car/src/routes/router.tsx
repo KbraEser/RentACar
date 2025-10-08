@@ -35,6 +35,7 @@ import RegisterPage from "../components/RegisterPage";
 import Dashboard from "../components/dashboard/Dashboard";
 import RezervationForm from "../components/dashboard/reservation/ReservationForm";
 import ReservationSuccess from "../components/dashboard/reservation/ReservationSuccess";
+import ReservationList from "../components/dashboard/reservation/ReservationList";
 
 export default createBrowserRouter([
   {
@@ -111,6 +112,10 @@ export default createBrowserRouter([
             element: <ReservationSuccess />,
           },
         ],
+      },
+      {
+        path: "reservation",
+        element: <ReservationList />,
       },
 
       // {
