@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, type LoaderFunctionArgs } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 import AuthLayout from "../layouts/AuthLayout";
 import DashboardLayout from "../layouts/DashboardLayout";
@@ -13,19 +13,15 @@ import {
 } from "../services/carService";
 
 // Ortak car loader fonksiyonu
-const carLoader = async ({ params }: { params: any }) => {
-  try {
-    if (
-      !params.id ||
-      typeof params.id !== "string" ||
-      params.id.trim() === ""
-    ) {
-      throw new Error("Geçersiz araç ID'si");
-    }
-    return await fetchCarById(params.id);
-  } catch (error) {
-    throw error;
+const carLoader = async ({ params }: LoaderFunctionArgs) => {
+  if (
+    !params.id ||
+    typeof params.id !== "string" ||
+    params.id.trim() === ""
+  ) {
+    throw new Error("Geçersiz araç ID'si");
   }
+  return await fetchCarById(params.id);
 };
 
 import CarCard from "../components/CarCard";

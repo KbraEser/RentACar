@@ -72,7 +72,7 @@ export const handleAndShowError = (error: unknown, context: string): string => {
 };
 
 export const validateInput = (
-  value: any,
+  value: unknown,
   fieldName: string,
   required: boolean = true
 ): void => {

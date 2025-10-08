@@ -59,6 +59,15 @@ export const DELIVERY_LOCATIONS = [
   { value: "home", label: "Ev Adresi" },
 ] as const;
 
+// Time constants
+export const TIME_CONSTANTS = {
+  MILLISECONDS_IN_SECOND: 1000,
+  SECONDS_IN_MINUTE: 60,
+  MINUTES_IN_HOUR: 60,
+  HOURS_IN_DAY: 24,
+  MILLISECONDS_IN_DAY: 1000 * 60 * 60 * 24, // 86,400,000
+} as const;
+
 // Type definitions
 export type CityValue = (typeof CITIES)[number]["value"];
 export type CarMakeValue = (typeof CAR_MAKES)[number]["value"];

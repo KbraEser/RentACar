@@ -2,6 +2,21 @@ import { supabase } from "../lib/supabaseClient";
 import type { Car } from "../types/car";
 import { handleError, validateCarId } from "../utils/errorHandler";
 
+// Car filter types
+export interface CarFilters {
+  startDate?: string;
+  endDate?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  city?: string;
+  make?: string;
+  fuel_type?: string;
+  transmission?: string;
+  seats?: number;
+  is_available?: boolean;
+  is_featured?: boolean;
+}
+
 // Tüm arabaları getir
 export const fetchAllCars = async (): Promise<Car[]> => {
   const { data, error } = await supabase.from("cars").select("*");
@@ -13,7 +28,7 @@ export const fetchAllCars = async (): Promise<Car[]> => {
 
 // Filtrelenmiş arabaları getir
 export const fetchFilteredCars = async (
-  filters: Record<string, any>
+  filters: CarFilters
 ): Promise<Car[]> => {
   let query = supabase.from("cars").select("*");
 

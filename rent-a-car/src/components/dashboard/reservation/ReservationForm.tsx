@@ -1,7 +1,7 @@
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { getCarImage } from "../../utils/carImages";
 import type { Car } from "../../../types/car";
-import { DELIVERY_LOCATIONS, CITIES } from "../../../constants";
+import { DELIVERY_LOCATIONS, TIME_CONSTANTS } from "../../../constants";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -20,16 +20,9 @@ export interface ReservationFormData {
 
 const ReservationForm = () => {
   const carData = useLoaderData();
-
-  const car = carData as Car;
-
-  // Car veya city null ise early return
-  if (!car) {
-    return <div>Araç bilgisi yüklenemedi</div>;
-  }
-
   const user = useSelector((state: RootState) => state.auth.user);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const savedFilters = JSON.parse(localStorage.getItem("filters") || "{}");
   const { startDate: savedStartDate, endDate: savedEndDate } = savedFilters;
@@ -38,28 +31,32 @@ const ReservationForm = () => {
     defaultValues: {
       startDate: savedStartDate || "",
       endDate: savedEndDate || "",
-
       totalPrice: 0,
     },
   });
 
+  const car = carData as Car;
   const startDate = watch("startDate");
   const endDate = watch("endDate");
-
   const totalPrice = watch("totalPrice");
 
   useEffect(() => {
+    if (!car) return; // Early return inside useEffect is OK
+
     validateAndResetEndDate(startDate, endDate, setValue);
     if (endDate && startDate && endDate >= startDate) {
       const totalPrice =
         car.price_per_day *
         ((new Date(endDate).getTime() - new Date(startDate).getTime()) /
-          (1000 * 60 * 60 * 24));
+          TIME_CONSTANTS.MILLISECONDS_IN_DAY);
       setValue("totalPrice", totalPrice);
     }
-  }, [startDate, endDate, car.price_per_day]);
+  }, [startDate, endDate, car?.price_per_day, setValue, car]);
 
-  const dispatch = useAppDispatch();
+  // Car veya city null ise early return
+  if (!car) {
+    return <div>Araç bilgisi yüklenemedi</div>;
+  }
 
   return (
     <div className="reservation-container">

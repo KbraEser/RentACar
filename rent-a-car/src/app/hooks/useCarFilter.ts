@@ -1,6 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import type { Car } from "../../types/car";
-import { fetchFilteredCars } from "../../services/carService";
+import { fetchFilteredCars, type CarFilters } from "../../services/carService";
 import type { FilterFormData } from "../../components/car/CarFilterForm";
 import { handleAndShowError } from "../../utils/errorHandler";
 
@@ -24,7 +24,7 @@ export function useCarFilter({ initialCars }: UseCarFilterProps) {
     setLoading(true);
     try {
       // Filtreleri hazırla
-      const filters: Record<string, any> = {};
+      const filters: CarFilters = {};
 
       // Şehir filtresi
       if (formData.city && formData.city !== "") {
