@@ -51,15 +51,13 @@ export const fetchRentalsService = async (user_id: string) => {
 };
 
 export const cancelReservationService = async (id: string) => {
-  console.log("Cancelling reservation with ID:", id, "Type:", typeof id);
   const { data, error } = await supabase
     .from("rentals")
     .update({ status: "cancelled" })
     .eq("id", id)
     .select();
-  console.log("Supabase response:", { data, error });
+
   if (error) {
-    console.error("Supabase error in cancelReservationService:", error);
     throw new Error(
       handleError(error, "ReservationService.cancelReservationService")
     );

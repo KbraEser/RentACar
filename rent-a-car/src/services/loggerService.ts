@@ -1,5 +1,5 @@
 class LoggerService {
-  public error(message: string, error?: Error, errorInfo?: any): void {
+  public error(message: string, error?: Error, errorInfo?: unknown): void {
     console.error(`[ERROR] ${message}`, error, errorInfo);
 
     // Production'da external logging service'e gönderilebilir
@@ -9,15 +9,15 @@ class LoggerService {
     }
   }
 
-  public log(error: Error, errorInfo?: any): void {
+  public log(error: Error, errorInfo?: unknown): void {
     this.error("ErrorBoundary caught an error", error, errorInfo);
   }
 
-  public info(message: string, data?: any): void {
+  public info(message: string, data?: unknown): void {
     console.info(`[INFO] ${message}`, data);
   }
 
-  public warn(message: string, data?: any): void {
+  public warn(message: string, data?: unknown): void {
     console.warn(`[WARN] ${message}`, data);
   }
 }

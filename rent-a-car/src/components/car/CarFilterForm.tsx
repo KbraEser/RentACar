@@ -100,7 +100,7 @@ export default function CarFilterForm({
         clearTimeout(debounceTimerRef.current);
       }
     };
-  }, [startDate, endDate, city, make, fuelType, priceRange, transmission]);
+  }, [startDate, endDate, city, make, fuelType, priceRange, transmission, setValue]);
 
   // const handleApplyFilters = () => {
   //   onFiltersChange(getValues());

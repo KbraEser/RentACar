@@ -14,7 +14,6 @@ const ReservationList = () => {
   useEffect(() => {
     if (user) {
       dispatch(fetchRentals(user.id));
-    } else {
     }
   }, [dispatch, user]);
 
