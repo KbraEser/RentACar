@@ -19,7 +19,7 @@ export const createReservationService = async (
         end_date: reservation.end_date,
         total_price: reservation.total_price,
         city: car.city,
-
+        location: reservation.delivery_location,
         status: "active",
         created_at: now,
         updated_at: now,
@@ -38,7 +38,16 @@ export const createReservationService = async (
 export const fetchRentalsService = async (user_id: string) => {
   const { data, error } = await supabase
     .from("rentals")
-    .select("*")
+    .select(
+      `
+      *,
+      cars (
+        make,
+        model,
+        year
+      )
+    `
+    )
     .eq("user_id", user_id);
 
   if (error) {

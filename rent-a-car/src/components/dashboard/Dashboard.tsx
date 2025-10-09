@@ -9,6 +9,7 @@ import {
 } from "react-icons/ai";
 import { fetchFeaturedCars } from "../../store/slices/carSlice";
 import LoadingCard from "../common/LoadingCard";
+import ReservationList from "./reservation/ReservationList";
 
 const Dashboard = () => {
   const dispatch = useAppDispatch();
@@ -40,26 +41,7 @@ const Dashboard = () => {
       </div>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <NavLink
-          to="/dashboard/reservation"
-          className="rounded-lg shadow-md p-4 hover:shadow-lg transition-all duration-300 border bg-white border-gray-300 hover:border-orange-500"
-        >
-          <div className="flex items-center space-x-4">
-            <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-orange-600">
-              <AiOutlineCalendar className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold text-gray-800">
-                Rezervasyonlarım
-              </h3>
-              <p className="text-sm text-gray-600">
-                Aktif rezervasyonları takip et
-              </p>
-            </div>
-          </div>
-        </NavLink>
-
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
         <NavLink
           to="/dashboard/cars"
           className="rounded-lg shadow-md p-4 hover:shadow-lg transition-all duration-300 border bg-white border-gray-300 hover:border-orange-500"
@@ -92,6 +74,7 @@ const Dashboard = () => {
           </div>
         </NavLink>
       </div>
+      <ReservationList />
     </div>
   );
 };

@@ -81,9 +81,14 @@ const rentalsSlice = createSlice({
         state.loading = false;
         const cancelledId = action.meta.arg;
 
-        state.rentals = state.rentals.filter(
-          (rental) => rental.id !== cancelledId
+        // Rezervasyonu bul ve status'unu güncelle
+        const rentalIndex = state.rentals.findIndex(
+          (rental) => rental.id === cancelledId
         );
+        
+        if (rentalIndex !== -1) {
+          state.rentals[rentalIndex].status = "cancelled";
+        }
       })
       .addCase(cancelReservation.rejected, (state, action) => {
         state.loading = false;

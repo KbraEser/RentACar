@@ -4,6 +4,8 @@ import type { RootState } from "../../../store/store";
 import { fetchRentals } from "../../../store/slices/rentalsSlice";
 import LoadingCard from "../../common/LoadingCard";
 import { cancelReservation } from "../../../store/slices/rentalsSlice";
+import { toast } from "react-toastify";
+
 const ReservationList = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state: RootState) => state.auth.user);
@@ -19,7 +21,7 @@ const ReservationList = () => {
 
   if (loading) {
     return (
-      <div className="space-y-6 m-10">
+      <div className="space-y-6 m-10 ">
         <LoadingCard title="Rezervasyonlar yükleniyor..." />
       </div>
     );
@@ -27,17 +29,11 @@ const ReservationList = () => {
 
   if (error) {
     return (
-      <div className="space-y-6 m-10">
+      <div className="space-y-4 m-15">
         <div
           className="rounded-lg shadow-lg p-6"
           style={{ backgroundColor: "var(--color-white)" }}
         >
-          <h1
-            className="text-2xl font-bold mb-4"
-            style={{ color: "var(--color-gray-800)" }}
-          >
-            Rezervasyonlarım
-          </h1>
           <div className="text-center py-12">
             <div className="text-red-500 mb-4">
               <svg
@@ -71,17 +67,11 @@ const ReservationList = () => {
 
   if (rentals.length === 0) {
     return (
-      <div className="space-y-6 m-8">
+      <div className="space-y-6 ">
         <div
           className="rounded-lg shadow-lg p-6"
           style={{ backgroundColor: "var(--color-white)" }}
         >
-          <h1
-            className="text-2xl font-bold mb-4"
-            style={{ color: "var(--color-gray-800)" }}
-          >
-            Rezervasyonlarım
-          </h1>
           <div className="text-center py-12">
             <svg
               className="mx-auto h-16 w-16 mb-4"
@@ -113,61 +103,101 @@ const ReservationList = () => {
   }
 
   return (
-    <div className="space-y-6 m-10">
+    <div className="space-y-6 mt-10 ">
+      {" "}
       <div
-        className="rounded-lg shadow-lg p-6"
+        className="rounded-lg shadow-lg p-6 "
         style={{ backgroundColor: "var(--color-white)" }}
       >
+        {" "}
         <h1
-          className="text-2xl font-bold mb-4"
+          className="text-xl font-bold mb-4"
           style={{ color: "var(--color-gray-800)" }}
         >
-          Rezervasyonlarım
+          Rezervasyon Listesi
         </h1>
-        <div className="w-full">
-          {rentals.map((reservation) => (
-            <div
-              key={reservation.id}
-              className="border rounded-lg p-4"
-              style={{ borderColor: "var(--color-gray-300)" }}
-            >
-              <h3
-                className="text-lg font-bold mb-2"
-                style={{ color: "var(--color-gray-800)" }}
-              >
-                Araç ID: {reservation.car_id}
-              </h3>
-              <p
-                className="text-sm mb-2"
-                style={{ color: "var(--color-gray-600)" }}
-              >
-                {new Date(reservation.start_date).toLocaleDateString("tr-TR")} -{" "}
-                {new Date(reservation.end_date).toLocaleDateString("tr-TR")}
-              </p>
-              <p
-                className="text-sm mb-2"
-                style={{ color: "var(--color-gray-600)" }}
-              >
-                Toplam: {reservation.total_price}₺
-              </p>
-              <p
-                className="text-sm mb-2"
-                style={{ color: "var(--color-gray-600)" }}
-              >
-                Durum: {reservation.status}
-              </p>
-              <button
-                disabled={reservation.status === "cancelled"}
-                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
-                onClick={() => {
-                  dispatch(cancelReservation(reservation.id as string));
-                }}
-              >
-                {reservation.status === "active" ? "İptal Et" : "İptal Edildi"}
-              </button>
-            </div>
-          ))}
+        <div className="overflow-x-auto ">
+          <table className="w-full border-collapse rounded-lg shadow-lg">
+            <thead>
+              <tr>
+                <th className="text-left p-2 text-gray-600">Araç</th>
+                <th className="text-left p-2 text-gray-600">Başlangıç</th>
+                <th className="text-left p-2 text-gray-600">Bitiş </th>
+                <th className="text-left p-2 text-gray-600">Toplam Fiyat</th>
+                <th className="text-left p-2 text-gray-600">Durum</th>
+                <th className="text-left p-2 text-gray-600">Alış Yeri</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rentals.map((reservation) => {
+                console.log("Reservation:", reservation);
+                return (
+                  <tr
+                    className="border-b"
+                    key={reservation.id || reservation.car_id}
+                  >
+                    <td className=" p-2">
+                      {reservation.cars
+                        ? `${reservation.cars.make} ${reservation.cars.model}`
+                        : `Araç ID: ${reservation.car_id}`}
+                    </td>
+                    <td className=" p-2">
+                      {new Date(reservation.start_date).toLocaleDateString(
+                        "tr-TR"
+                      )}
+                    </td>
+                    <td className=" p-2">
+                      {new Date(reservation.end_date).toLocaleDateString(
+                        "tr-TR"
+                      )}
+                    </td>
+                    <td className=" p-2 ">{reservation.total_price} ₺</td>
+                    <td className=" p-2">
+                      <span
+                        className={`px-2 py-2 rounded-full text-sm font-medium ${
+                          reservation.status === "active"
+                            ? "bg-green-100 text-green-800"
+                            : "bg-red-100 text-red-800"
+                        }`}
+                      >
+                        {reservation.status === "active" ? "Aktif" : "İptal "}
+                      </span>
+                    </td>
+                    <td className=" p-2">
+                      {reservation.city}-{reservation.delivery_location}
+                    </td>
+                    <td className=" p-2">
+                      <button
+                        onClick={() =>
+                          toast.warning(
+                            "Rezervasyonu iptal etmek istediğinizden emin misiniz?",
+                            {
+                              onClick: () => {
+                                dispatch(
+                                  cancelReservation(reservation.id || "")
+                                );
+                                toast.success(
+                                  "Rezervasyon başarıyla iptal edildi"
+                                );
+                              },
+                            }
+                          )
+                        }
+                        disabled={reservation.status === "cancelled"}
+                        className="primary-button "
+                      >
+                        {reservation.status === "active"
+                          ? "İptal Et"
+                          : "İptal Edildi"}
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
+        <div className="w-full"></div>
       </div>
     </div>
   );

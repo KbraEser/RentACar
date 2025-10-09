@@ -14,11 +14,7 @@ import {
 
 // Ortak car loader fonksiyonu
 const carLoader = async ({ params }: LoaderFunctionArgs) => {
-  if (
-    !params.id ||
-    typeof params.id !== "string" ||
-    params.id.trim() === ""
-  ) {
+  if (!params.id || typeof params.id !== "string" || params.id.trim() === "") {
     throw new Error("Geçersiz araç ID'si");
   }
   return await fetchCarById(params.id);

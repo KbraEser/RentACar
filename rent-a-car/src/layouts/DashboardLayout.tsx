@@ -57,11 +57,7 @@ const DashboardLayout = () => {
                   Araçlar
                 </Link>
               </li>
-              <li>
-                <Link to="/dashboard/reservation" className="navbar-link">
-                  Rezervasyonlarım
-                </Link>
-              </li>
+
               <li>
                 <Link to="/dashboard/profile" className="navbar-link">
                   Profil
