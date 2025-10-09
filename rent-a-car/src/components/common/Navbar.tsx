@@ -14,9 +14,7 @@ const Navbar = () => {
           <Link to="/cars" className="navbar-link">
             Araçlar
           </Link>
-          <Link to="/about" className="navbar-link">
-            Hakkımızda
-          </Link>
+
           <Link to="/contact" className="navbar-link">
             İletişim
           </Link>

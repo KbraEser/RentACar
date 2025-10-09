@@ -16,6 +16,7 @@ export interface ReservationFormData {
   startDate: string;
   endDate: string;
   totalPrice: number;
+  deliveryLocation: string;
 }
 
 const ReservationForm = () => {
@@ -32,6 +33,7 @@ const ReservationForm = () => {
       startDate: savedStartDate || "",
       endDate: savedEndDate || "",
       totalPrice: 0,
+      deliveryLocation: "",
     },
   });
 
@@ -39,6 +41,7 @@ const ReservationForm = () => {
   const startDate = watch("startDate");
   const endDate = watch("endDate");
   const totalPrice = watch("totalPrice");
+  const deliveryLocation = watch("deliveryLocation");
 
   useEffect(() => {
     if (!car) return; // Early return inside useEffect is OK
@@ -181,6 +184,8 @@ const ReservationForm = () => {
                           total_price: totalPrice,
                           status: "active",
                           city: car.city,
+
+                          delivery_location: deliveryLocation,
                         },
                         car: car,
                       })

@@ -36,7 +36,7 @@ body {
   }
 
   .navbar-logo {
-    @apply text-2xl font-bold flex-shrink-0;
+    @apply text-2xl font-bold flex-shrink-0 px-10;
     background: linear-gradient(
       135deg,
       var(--color-white) 0%,
