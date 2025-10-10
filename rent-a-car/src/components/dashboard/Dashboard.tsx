@@ -2,11 +2,7 @@ import { useAppSelector, useAppDispatch } from "../../app/hooks/storeHooks";
 import type { RootState } from "../../store/store";
 import { NavLink } from "react-router-dom";
 import { useEffect } from "react";
-import {
-  AiOutlineCalendar,
-  AiOutlinePlus,
-  AiOutlineUser,
-} from "react-icons/ai";
+import { AiOutlinePlus, AiOutlineUser } from "react-icons/ai";
 import { fetchFeaturedCars } from "../../store/slices/carSlice";
 import LoadingCard from "../common/LoadingCard";
 import ReservationList from "./reservation/ReservationList";

@@ -2,15 +2,16 @@ import { useLoaderData, useNavigate } from "react-router-dom";
 import { getCarImage } from "../../utils/carImages";
 import type { Car } from "../../../types/car";
 import { DELIVERY_LOCATIONS, TIME_CONSTANTS } from "../../../constants";
-import { useForm } from "react-hook-form";
+
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../../store/store";
-import { getMinDate, getTodayString } from "../../utils/dataUtils";
+import { useForm } from "react-hook-form";
 import { validateAndResetEndDate } from "../../utils/dataUtils";
 import { createReservation } from "../../../store/slices/rentalsSlice";
 import { useAppDispatch } from "../../../app/hooks/storeHooks";
 import { handleAndShowError } from "../../../utils/errorHandler";
+import DatePicker from "./DatePicker";
 
 export interface ReservationFormData {
   startDate: string;
@@ -26,7 +27,10 @@ const ReservationForm = () => {
   const dispatch = useAppDispatch();
 
   const savedFilters = JSON.parse(localStorage.getItem("filters") || "{}");
-  const { startDate: savedStartDate, endDate: savedEndDate } = savedFilters;
+  const hasFilters = savedFilters.startDate && savedFilters.endDate;
+  const { startDate: savedStartDate, endDate: savedEndDate } = hasFilters
+    ? savedFilters
+    : { startDate: "", endDate: "" };
 
   const { register, watch, setValue } = useForm<ReservationFormData>({
     defaultValues: {
@@ -38,15 +42,16 @@ const ReservationForm = () => {
   });
 
   const car = carData as Car;
-  const startDate = watch("startDate");
-  const endDate = watch("endDate");
   const totalPrice = watch("totalPrice");
   const deliveryLocation = watch("deliveryLocation");
+  const startDate = watch("startDate");
+  const endDate = watch("endDate");
 
   useEffect(() => {
     if (!car) return; // Early return inside useEffect is OK
 
     validateAndResetEndDate(startDate, endDate, setValue);
+
     if (endDate && startDate && endDate >= startDate) {
       const totalPrice =
         car.price_per_day *
@@ -128,34 +133,11 @@ const ReservationForm = () => {
               <h3 className="reservation-form-title">Rezervasyon Bilgileri</h3>
 
               <form className="space-y-4">
-                <div className="reservation-form-grid">
-                  <div className="reservation-form-group">
-                    <label className="reservation-form-label">
-                      Başlangıç Tarihi
-                    </label>
-                    <input
-                      {...register("startDate")}
-                      defaultValue={savedStartDate || ""}
-                      type="date"
-                      className="reservation-form-input"
-                      required
-                      min={getTodayString()}
-                    />
-                  </div>
-                  <div className="reservation-form-group">
-                    <label className="reservation-form-label">
-                      Bitiş Tarihi
-                    </label>
-                    <input
-                      {...register("endDate")}
-                      defaultValue={savedEndDate || ""}
-                      type="date"
-                      className="reservation-form-input"
-                      required
-                      min={getMinDate(watch("startDate"))}
-                    />
-                  </div>
-                </div>
+                <DatePicker
+                  register={register}
+                  watch={watch}
+                  setValue={setValue}
+                />
 
                 <div>
                   <label className="reservation-form-label">Teslim Yeri</label>

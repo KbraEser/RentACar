@@ -6,6 +6,7 @@ import { store } from "./store/store.ts";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ErrorBoundary from "./components/common/ErrorBoundary";
+import "react-datepicker/dist/react-datepicker.css";
 
 createRoot(document.getElementById("root")!).render(
   <ErrorBoundary>
