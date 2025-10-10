@@ -40,6 +40,8 @@ export const fetchRentalsService = async (user_id: string) => {
     .from("rentals")
     .select(
       `
+      start_date,
+      end_date,
       *,
       cars (
         make,
