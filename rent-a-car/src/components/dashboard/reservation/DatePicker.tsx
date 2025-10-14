@@ -12,6 +12,7 @@ import type { RootState } from "../../../store/store";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks/storeHooks";
 import { useEffect } from "react";
 import { fetchRentalsByStatusDate } from "../../../store/slices/rentalsSlice";
+import { isSelectedDateInDisabledDates } from "../../../utils/dateHelpers";
 interface DatePickerProps {
   register: UseFormRegister<ReservationFormData>;
   watch: UseFormWatch<ReservationFormData>;
@@ -23,6 +24,7 @@ registerLocale("tr", tr);
 
 const DatePicker = ({ register, watch, setValue, carId }: DatePickerProps) => {
   const dispatch = useAppDispatch();
+
   useEffect(() => {
     if (carId) {
       dispatch(fetchRentalsByStatusDate(carId));
@@ -40,6 +42,11 @@ const DatePicker = ({ register, watch, setValue, carId }: DatePickerProps) => {
   );
 
   const disabledDates = generateDisabledDates(reservations);
+  useEffect(() => {
+    if (startDate && endDate) {
+      isSelectedDateInDisabledDates(startDate, endDate, reservations, setValue);
+    }
+  }, [startDate, endDate, reservations, setValue]);
 
   return (
     <div className="reservation-form-grid">
@@ -50,7 +57,6 @@ const DatePicker = ({ register, watch, setValue, carId }: DatePickerProps) => {
           selected={startDate ? new Date(startDate + "T00:00:00") : null}
           onChange={(date) => {
             if (date) {
-              // Yerel tarih formatını kullan (UTC dönüşümü yapmadan)
               const year = date.getFullYear();
               const month = String(date.getMonth() + 1).padStart(2, "0");
               const day = String(date.getDate()).padStart(2, "0");
@@ -63,7 +69,9 @@ const DatePicker = ({ register, watch, setValue, carId }: DatePickerProps) => {
           minDate={new Date()}
           excludeDates={disabledDates}
           placeholderText="Başlangıç Tarihi"
-          disabled={disabledDates.includes(new Date(startDate + "T00:00:00"))}
+          disabled={Boolean(
+            disabledDates.includes(new Date(startDate + "T00:00:00"))
+          )}
           className="reservation-datepicker"
           locale="tr"
         />
@@ -75,7 +83,6 @@ const DatePicker = ({ register, watch, setValue, carId }: DatePickerProps) => {
           selected={endDate ? new Date(endDate + "T00:00:00") : null}
           onChange={(date) => {
             if (date) {
-              // Yerel tarih formatını kullan (UTC dönüşümü yapmadan)
               const year = date.getFullYear();
               const month = String(date.getMonth() + 1).padStart(2, "0");
               const day = String(date.getDate()).padStart(2, "0");
@@ -88,7 +95,9 @@ const DatePicker = ({ register, watch, setValue, carId }: DatePickerProps) => {
           minDate={new Date()}
           excludeDates={disabledDates}
           placeholderText="Bitiş Tarihi"
-          disabled={disabledDates.includes(new Date(endDate + "T00:00:00"))}
+          disabled={Boolean(
+            disabledDates.includes(new Date(endDate + "T00:00:00"))
+          )}
           className="reservation-datepicker"
           locale="tr"
         />

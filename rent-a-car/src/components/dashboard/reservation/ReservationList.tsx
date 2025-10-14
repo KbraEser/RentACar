@@ -1,9 +1,13 @@
 import { useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "../../../app/hooks/storeHooks";
 import type { RootState } from "../../../store/store";
-import { fetchRentals } from "../../../store/slices/rentalsSlice";
+import {
+  cancelReservation,
+  fetchRentals,
+} from "../../../store/slices/rentalsSlice";
 import LoadingCard from "../../common/LoadingCard";
-import { cancelReservation } from "../../../store/slices/rentalsSlice";
+import ReservationListError from "./ReservationListError";
+import ReservationListNull from "./ReservationListNull";
 import { toast } from "react-toastify";
 
 const ReservationList = () => {
@@ -28,79 +32,45 @@ const ReservationList = () => {
   }
 
   if (error) {
-    return (
-      <div className="space-y-4 m-15">
-        <div
-          className="rounded-lg shadow-lg p-6"
-          style={{ backgroundColor: "var(--color-white)" }}
-        >
-          <div className="text-center py-12">
-            <div className="text-red-500 mb-4">
-              <svg
-                className="mx-auto h-16 w-16"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={1.5}
-                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
-                />
-              </svg>
-            </div>
-            <h3
-              className="text-lg font-medium mb-2"
-              style={{ color: "var(--color-gray-800)" }}
-            >
-              Hata Oluştu
-            </h3>
-            <p className="text-sm" style={{ color: "var(--color-gray-600)" }}>
-              {error}
-            </p>
-          </div>
-        </div>
-      </div>
-    );
+    return <ReservationListError />;
+  }
+  if (rentals.length === 0) {
+    return <ReservationListNull />;
   }
 
-  if (rentals.length === 0) {
-    return (
-      <div className="space-y-6 ">
+  const handleCancelClick = (reservationId: string) => {
+    toast(({ closeToast }) => (
+      <div style={{ textAlign: "center" }}>
+        <p>Rezervasyonu iptal etmek istediğinizden emin misiniz?</p>
         <div
-          className="rounded-lg shadow-lg p-6"
-          style={{ backgroundColor: "var(--color-white)" }}
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            gap: "10px",
+            marginTop: "10px",
+          }}
         >
-          <div className="text-center py-12">
-            <svg
-              className="mx-auto h-16 w-16 mb-4"
-              style={{ color: "var(--color-gray-400)" }}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-              />
-            </svg>
-            <h3
-              className="text-lg font-medium mb-2"
-              style={{ color: "var(--color-gray-800)" }}
-            >
-              Henüz rezervasyon yok
-            </h3>
-            <p className="text-sm" style={{ color: "var(--color-gray-600)" }}>
-              İlk rezervasyonunuzu yapmak için araçları inceleyin.
-            </p>
-          </div>
+          <button
+            onClick={() => {
+              dispatch(cancelReservation(reservationId));
+              toast.success("Rezervasyon başarıyla iptal edildi");
+              closeToast();
+            }}
+            style={{
+              backgroundColor: "var(--color-orange-600)",
+              color: "white",
+              border: "none",
+              padding: "8px 16px",
+              borderRadius: "4px",
+              cursor: "pointer",
+            }}
+          >
+            Evet, İptal Et
+          </button>
         </div>
       </div>
-    );
-  }
+    ));
+  };
 
   return (
     <div className="space-y-6 mt-10 ">
@@ -124,7 +94,7 @@ const ReservationList = () => {
                 <th className="text-left p-2 text-gray-600">Başlangıç</th>
                 <th className="text-left p-2 text-gray-600">Bitiş </th>
                 <th className="text-left p-2 text-gray-600">Toplam Fiyat</th>
-                <th className="text-left p-2 text-gray-600">Durum</th>
+
                 <th className="text-left p-2 text-gray-600">Alış Yeri</th>
               </tr>
             </thead>
@@ -151,40 +121,23 @@ const ReservationList = () => {
                         "tr-TR"
                       )}
                     </td>
-                    <td className=" p-2 ">{reservation.total_price} ₺</td>
-                    <td className=" p-2">
-                      <span
-                        className={`px-2 py-2 rounded-full text-sm font-medium ${
-                          reservation.status === "active"
-                            ? "bg-green-100 text-green-800"
-                            : "bg-red-100 text-red-800"
-                        }`}
-                      >
-                        {reservation.status === "active" ? "Aktif" : "İptal "}
-                      </span>
+                    <td className=" p-2 justify-center ">
+                      {" "}
+                      {reservation.total_price} ₺
                     </td>
+
                     <td className=" p-2">
-                      {reservation.city}-{reservation.delivery_location}
+                      {reservation.city}-{reservation.location}
                     </td>
                     <td className=" p-2">
                       <button
-                        onClick={() =>
-                          toast.warning(
-                            "Rezervasyonu iptal etmek istediğinizden emin misiniz?",
-                            {
-                              onClick: () => {
-                                dispatch(
-                                  cancelReservation(reservation.id || "")
-                                );
-                                toast.success(
-                                  "Rezervasyon başarıyla iptal edildi"
-                                );
-                              },
-                            }
-                          )
-                        }
+                        onClick={() => handleCancelClick(reservation.id || "")}
                         disabled={reservation.status === "cancelled"}
-                        className="primary-button "
+                        className={`primary-button ${
+                          reservation.status === "cancelled"
+                            ? "opacity-75 cursor-not-allowed"
+                            : ""
+                        }`}
                       >
                         {reservation.status === "active"
                           ? "İptal Et"

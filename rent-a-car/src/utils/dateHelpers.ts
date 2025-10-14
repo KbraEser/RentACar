@@ -1,10 +1,13 @@
+import { toast } from "react-toastify";
+import { useAppSelector } from "../app/hooks/storeHooks";
+import type { RootState } from "../store/store";
+
 export const generateDisabledDates = (
   reservations: { start_date: string; end_date: string }[]
 ): Date[] => {
   const disabledDates: Date[] = [];
 
   reservations.forEach((reservation) => {
-    // Tarih string'ine saat bilgisi ekleyerek UTC sorununu çöz
     const start = new Date(reservation.start_date + "T00:00:00");
     const end = new Date(reservation.end_date + "T00:00:00");
 
@@ -15,4 +18,30 @@ export const generateDisabledDates = (
     }
   });
   return disabledDates;
+};
+
+export const isSelectedDateInDisabledDates = (
+  startDate: string,
+  endDate: string,
+  reservations: { start_date: string; end_date: string }[],
+  setValue?: (field: "startDate" | "endDate", value: string) => void
+) => {
+  if (!startDate || !endDate) return false;
+
+  const disabledDates = generateDisabledDates(reservations);
+  const hasConflict = disabledDates.some(
+    (date) => new Date(startDate) <= date && new Date(endDate) >= date
+  );
+
+  if (hasConflict) {
+    if (setValue) {
+      setValue("startDate", "");
+      setValue("endDate", "");
+    }
+    toast.error(
+      "Bu tarih aralığında rezervasyon yapılamaz lütfen başka bir tarih seçiniz"
+    );
+    return true;
+  }
+  return false;
 };
