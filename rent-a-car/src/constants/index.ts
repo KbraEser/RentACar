@@ -54,10 +54,10 @@ export const PRICE_RANGES = [
 
 // Teslim yerleri
 export const DELIVERY_LOCATIONS = [
-  { value: "office", label: "Ofis" },
-  { value: "airport", label: "Havaalanı" },
-  { value: "hotel", label: "Otel" },
-  { value: "home", label: "Ev Adresi" },
+  { value: "Ofis", label: "Ofis" },
+  { value: "Havaalanı", label: "Havaalanı" },
+  { value: "Otel", label: "Otel" },
+  { value: "Ev Adresi", label: "Ev Adresi" },
 ] as const;
 
 // Time constants

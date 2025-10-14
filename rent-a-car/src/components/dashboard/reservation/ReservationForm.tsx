@@ -142,7 +142,10 @@ const ReservationForm = () => {
 
                 <div>
                   <label className="reservation-form-label">Teslim Yeri</label>
-                  <select className="reservation-form-select">
+                  <select
+                    className="reservation-form-select"
+                    {...register("deliveryLocation")}
+                  >
                     <option value="">Lokasyon seçin</option>
                     {DELIVERY_LOCATIONS.map((location) => (
                       <option key={location.value} value={location.value}>
@@ -168,13 +171,18 @@ const ReservationForm = () => {
                           status: "active",
                           city: car.city,
 
-                          delivery_location: deliveryLocation,
+                          location: deliveryLocation,
                         },
                         car: car,
                       })
                     )
                       .then(() => {
-                        navigate("/dashboard");
+                        navigate("/dashboard/reservationSuccess", {
+                          state: {
+                            city: car.city,
+                            location: deliveryLocation,
+                          },
+                        });
                       })
                       .catch((error) => {
                         handleAndShowError(error, "ReservationForm.onClick");

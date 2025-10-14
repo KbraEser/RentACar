@@ -98,12 +98,10 @@ export default createBrowserRouter([
         path: "reservationForm/:id",
         element: <RezervationForm />,
         loader: carLoader,
-        children: [
-          {
-            path: "reservationSuccess",
-            element: <ReservationSuccess />,
-          },
-        ],
+      },
+      {
+        path: "reservationSuccess",
+        element: <ReservationSuccess />,
       },
       {
         path: "reservation",

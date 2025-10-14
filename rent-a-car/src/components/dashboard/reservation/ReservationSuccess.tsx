@@ -2,9 +2,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { FaCheckCircle } from "react-icons/fa";
 
 const ReservationSuccess = () => {
-  const location = useLocation();
+  const locations = useLocation();
   const navigate = useNavigate();
-  const { city } = location.state || {};
+  const { city, location } = locations.state || {};
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
@@ -24,15 +24,17 @@ const ReservationSuccess = () => {
             <p className="text-orange-800 font-medium mb-2">
               📍 Seçtiğiniz lokasyondan aracınızı alabilirsiniz:
             </p>
-            <p className="text-orange-700 text-lg font-semibold">{city}</p>
+            <p className="text-orange-700 text-lg font-semibold">
+              {city}- {location}
+            </p>
           </div>
         )}
 
         <button
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/dashboard")}
           className="w-full bg-orange-600 text-white py-3 px-4 rounded-md hover:bg-orange-700 font-medium"
         >
-          🏠 Anasayfaya Dön
+          Anasayfaya Dön
         </button>
       </div>
     </div>
