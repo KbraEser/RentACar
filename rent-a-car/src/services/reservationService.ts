@@ -61,6 +61,23 @@ export const fetchRentalsService = async (user_id: string) => {
   return data;
 };
 
+export const fetchRentalsByStatusDate = async (car_id: string) => {
+  const { data, error } = await supabase
+    .from("rentals")
+    .select("*")
+
+    .eq("car_id", car_id)
+    .eq("status", "active");
+
+  if (error) {
+    console.error("Supabase error in fetchRentalsByStatusDate:", error);
+    throw new Error(
+      handleError(error, "ReservationService.fetchRentalsByStatusDate")
+    );
+  }
+  return data;
+};
+
 export const cancelReservationService = async (id: string) => {
   const { data, error } = await supabase
     .from("rentals")

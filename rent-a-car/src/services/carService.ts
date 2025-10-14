@@ -34,12 +34,8 @@ export const fetchFilteredCars = async (
 
   Object.entries(filters).forEach(([key, value]) => {
     if (value !== undefined && value !== "" && value !== null) {
-      if (key === "startDate") {
-        // kiralama başlangıcı => car.available_from >= startDate
-        query = query.gte("available_from", value);
-      } else if (key === "endDate") {
-        // kiralama bitişi => car.available_to <= endDate
-        query = query.lte("available_to", value);
+      if (key === "startDate" || key === "endDate") {
+        return;
       } else if (key === "minPrice") {
         // Minimum fiyat filtresi
         const priceValue = typeof value === "string" ? parseInt(value) : value;
@@ -59,13 +55,60 @@ export const fetchFilteredCars = async (
     }
   });
 
-  const { data, error } = await query;
+  const { data: cars, error } = await query;
 
   if (error) {
     throw new Error(handleError(error, "CarService.fetchFilteredCars"));
   }
 
-  return data as Car[];
+  if (filters.startDate && filters.endDate) {
+    const availableCars = await filterCarsByReservations(
+      cars,
+      filters.startDate,
+      filters.endDate
+    );
+    return availableCars;
+  }
+
+  return cars as Car[];
+};
+
+const filterCarsByReservations = async (
+  cars: Car[],
+  startDate: string,
+  endDate: string
+): Promise<Car[]> => {
+  if (cars.length === 0) return [];
+  const carIds = cars.map((car) => car.id);
+
+  const { data: reservations } = await supabase
+    .from("rentals")
+    .select("car_id,start_date,end_date")
+    .in("car_id", carIds)
+    .eq("status", "active");
+
+  const reservationByCar =
+    reservations?.reduce((acc, reservation) => {
+      if (!acc[reservation.car_id]) {
+        acc[reservation.car_id] = [];
+      }
+      acc[reservation.car_id].push(reservation);
+      return acc;
+    }, {} as Record<string, typeof reservations>) || {};
+
+  const availableCars = cars.filter((car) => {
+    const carReservations = reservationByCar[car.id] || [];
+
+    return !carReservations.some((reservation) => {
+      const resStart = new Date(reservation.start_date);
+      const resEnd = new Date(reservation.end_date);
+      const filterStart = new Date(startDate);
+      const filterEnd = new Date(endDate);
+
+      return resStart <= filterEnd && resEnd >= filterStart;
+    });
+  });
+  return availableCars;
 };
 
 // Diğer servisler
