@@ -8,6 +8,7 @@ export const CITIES = [
   { value: "Antalya", label: "Antalya" },
   { value: "Gaziantep", label: "Gaziantep" },
   { value: "Konya", label: "Konya" },
+  { value: "Eskişehir", label: "Eskişehir" },
 ] as const;
 
 // Araç markaları

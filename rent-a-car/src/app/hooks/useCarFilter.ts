@@ -24,7 +24,10 @@ export function useCarFilter({ initialCars }: UseCarFilterProps) {
     setLoading(true);
     try {
       // Filtreleri hazırla
-      const filters: CarFilters = {};
+      const filters: CarFilters = {
+        startDate: formData.startDate,
+        endDate: formData.endDate,
+      };
 
       // Şehir filtresi
       if (formData.city && formData.city !== "") {
@@ -67,6 +70,7 @@ export function useCarFilter({ initialCars }: UseCarFilterProps) {
 
       if (Object.keys(filters).length > 0) {
         const filteredCars = await fetchFilteredCars(filters);
+
         setCars(filteredCars);
       } else {
         // Filtre yoksa başlangıç araçlarını göster

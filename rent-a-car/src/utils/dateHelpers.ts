@@ -4,8 +4,9 @@ export const generateDisabledDates = (
   const disabledDates: Date[] = [];
 
   reservations.forEach((reservation) => {
-    const start = new Date(reservation.start_date);
-    const end = new Date(reservation.end_date);
+    // Tarih string'ine saat bilgisi ekleyerek UTC sorununu çöz
+    const start = new Date(reservation.start_date + "T00:00:00");
+    const end = new Date(reservation.end_date + "T00:00:00");
 
     let currentDate = new Date(start);
     while (currentDate <= end) {

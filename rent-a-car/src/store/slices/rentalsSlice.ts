@@ -3,6 +3,7 @@ import {
   cancelReservationService,
   createReservationService,
   fetchRentalsService,
+  fetchRentalsByStatusDate as fetchRentalsByStatusDateService,
 } from "../../services/reservationService";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { ERROR_MESSAGES } from "../../types/errors";
@@ -10,12 +11,14 @@ import type { Car } from "../../types/car";
 
 type RentalsState = {
   rentals: Rentals[];
+  carReservations: Rentals[];
   loading: boolean;
   error: string | null;
 };
 
 const initialState: RentalsState = {
   rentals: [],
+  carReservations: [],
   loading: false,
   error: null,
 };
@@ -31,6 +34,13 @@ export const fetchRentals = createAsyncThunk(
   "rentals/fetchRentals",
   async (user_id: string) => {
     return await fetchRentalsService(user_id);
+  }
+);
+
+export const fetchRentalsByStatusDate = createAsyncThunk(
+  "rentals/fetchRentalsByStatusDate",
+  async (car_id: string) => {
+    return await fetchRentalsByStatusDateService(car_id);
   }
 );
 
@@ -85,7 +95,7 @@ const rentalsSlice = createSlice({
         const rentalIndex = state.rentals.findIndex(
           (rental) => rental.id === cancelledId
         );
-        
+
         if (rentalIndex !== -1) {
           state.rentals[rentalIndex].status = "cancelled";
         }
@@ -94,6 +104,19 @@ const rentalsSlice = createSlice({
         state.loading = false;
         state.error =
           action.error.message || ERROR_MESSAGES.RESERVATION_CANCEL_FAILED;
+      })
+      .addCase(fetchRentalsByStatusDate.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchRentalsByStatusDate.fulfilled, (state, action) => {
+        state.loading = false;
+        state.carReservations = action.payload;
+      })
+      .addCase(fetchRentalsByStatusDate.rejected, (state, action) => {
+        state.loading = false;
+        state.error =
+          action.error.message || ERROR_MESSAGES.RESERVATION_FETCH_FAILED;
       });
   },
 });

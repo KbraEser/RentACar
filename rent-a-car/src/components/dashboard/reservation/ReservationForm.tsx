@@ -137,6 +137,7 @@ const ReservationForm = () => {
                   register={register}
                   watch={watch}
                   setValue={setValue}
+                  carId={car.id}
                 />
 
                 <div>
