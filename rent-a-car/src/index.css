@@ -340,4 +340,10 @@ body {
   .reservation-datepicker {
     @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500;
   }
+
+  /* Modern Card Background */
+  .modern-card-bg {
+    background: linear-gradient(135deg, #f9fafb 0%, #ffffff 50%, #fef3e2 100%);
+    @apply rounded-2xl shadow-2xl p-8 border border-orange-100 backdrop-blur-sm;
+  }
 }

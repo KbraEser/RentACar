@@ -7,9 +7,16 @@ import { IoPricetagsSharp } from "react-icons/io5";
 import { IoIosClock } from "react-icons/io";
 import { IoShieldCheckmark } from "react-icons/io5";
 
+import { IoSearchOutline } from "react-icons/io5";
+
 const HomePage = () => {
   const navigate = useNavigate();
   const featuredCars = useLoaderData() as Car[];
+
+  const handleSearch = () => {
+    navigate("/cars");
+  };
+
   return (
     <>
       <div className="hero-section">
@@ -27,7 +34,12 @@ const HomePage = () => {
             >
               Aracınızı Seçin
             </button>
-            <button className="secondary-button">Fiyatları Görüntüleyin</button>
+            <button
+              onClick={() => navigate("/auth/login")}
+              className="secondary-button"
+            >
+              Giriş Yapın
+            </button>
           </div>
         </div>
         <div className="image-section">
@@ -38,49 +50,66 @@ const HomePage = () => {
           />
         </div>
       </div>
+
       <div className="inform-section">
-        <div className="reservation-section">
-          <h2 className="inform-title">Araç Kiralama</h2>
-          <div className="search-card">
-            <input
-              placeholder="Başlangıç Tarihi"
-              type="text"
-              id="start"
-              className="search-input"
-              onFocus={(e) => (e.target.type = "date")}
-              onBlur={(e) => (e.target.type = "text")}
-            />
+        <div className="max-w-6xl mx-auto">
+          <div className="modern-card-bg">
+            <div className="reservation-section">
+              <div className="text-center mb-8">
+                <h2 className="text-4xl font-bold text-gray-900 mb-4">
+                  Hızlı Araç Kiralama
+                </h2>
+                <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                  Sadece birkaç tıklama ile hayalinizdeki aracı bulun ve
+                  rezervasyon yapın
+                </p>
+              </div>
 
-            <input
-              placeholder="Bitiş Tarihi"
-              type="text"
-              id="end"
-              className="search-input"
-              onFocus={(e) => (e.target.type = "date")}
-              onBlur={(e) => (e.target.type = "text")}
-            />
+              {/* Ana Arama Butonu */}
+              <div className="text-center mb-12">
+                <button
+                  onClick={handleSearch}
+                  className="inline-flex items-center px-10 py-5 bg-gradient-to-r from-orange-600 to-orange-700 text-white font-bold text-xl rounded-xl hover:from-orange-700 hover:to-orange-800 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl"
+                >
+                  <IoSearchOutline className="w-7 h-7 mr-3" />
+                  Uygun Araçları Bul
+                </button>
+              </div>
 
-            <input
-              placeholder="Lokasyon"
-              type="text"
-              id="location"
-              className="search-input"
-            />
-            <input
-              placeholder="Araç Modeli"
-              type="text"
-              id="model"
-              className="search-input"
-            />
-
-            <button className="search-button">Rezervasyon Yapın</button>
+              {/* İstatistikler Bölümü */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-8 border-t border-gray-200">
+                <div className="text-center">
+                  <div className="text-4xl font-bold text-orange-600 mb-3">
+                    200+
+                  </div>
+                  <div className="text-gray-600 text-lg">Araç Seçeneği</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-4xl font-bold text-orange-600 mb-3">
+                    9
+                  </div>
+                  <div className="text-gray-600 text-lg">Şehir</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-4xl font-bold text-orange-600 mb-3">
+                    24/7
+                  </div>
+                  <div className="text-gray-600 text-lg">Müşteri Desteği</div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+
         <div className="featured-cars">
           <h2 className="inform-title">Öne Çıkan Araçlar</h2>
           <div className="cars-grid">
             {featuredCars.map((car: Car) => (
-              <div key={car.id} className="car-card">
+              <div
+                onClick={() => navigate(`/cars/carsDetail/${car.id}`)}
+                key={car.id}
+                className="modern-card-bg cursor-pointer"
+              >
                 <img
                   src={getCarImage(car.make)}
                   alt={`${car.make} ${car.model}`}
@@ -100,6 +129,7 @@ const HomePage = () => {
             ))}
           </div>
         </div>
+
         <div className="icons-section">
           <h2 className="inform-title">Neden Bizi Tercih Etmelisiniz?</h2>
           <div className="icons-grid">
@@ -132,7 +162,7 @@ const HomePage = () => {
             </div>
             <div className="icon-card">
               <div className="icon-card-content">
-                <IoShieldCheckmark />{" "}
+                <IoShieldCheckmark />
               </div>
               <h3 className="icon-title">Sigortalı Araçlar</h3>
               <p className="icon-description">
