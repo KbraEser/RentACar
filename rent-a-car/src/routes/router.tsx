@@ -108,10 +108,6 @@ export default createBrowserRouter([
         element: <ReservationList />,
       },
 
-      // {
-      //   path: "reservations",
-      //   element: <ReservationList />,
-      // },
       {
         path: "profile",
         element: (
