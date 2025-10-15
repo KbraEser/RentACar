@@ -1,21 +1,115 @@
-# 🚗 CarRental - Araç Kiralama Sistemi
+# 🚗 Rent A Car - Araç Kiralama Sistemi
 
-Modern, responsive araç kiralama web uygulaması. React, TypeScript ve Supabase ile geliştirilmiştir.
+Modern ve kullanıcı dostu araç kiralama web uygulaması. React 19, TypeScript ve Supabase ile geliştirilmiştir.
 
 ## ✨ Özellikler
 
 - **🔐 Kimlik Doğrulama**: Kullanıcı kaydı, giriş/çıkış
-- **🚗 Araç Yönetimi**: Araç listesi, detaylar, filtreleme
-- **📱 Responsive Tasarım**: Mobil uyumlu modern UI
-- **🎛️ Dashboard**: Kullanıcı paneli ve hızlı erişim
-- **🎨 Modern UI**: Tailwind CSS ile şık tasarım
+- **🚗 Araç Yönetimi**: Araç listesi, detaylar, gelişmiş filtreleme
+- **📅 Rezervasyon Sistemi**: Tarih seçimi, rezervasyon yönetimi
+- **🎛️ Dashboard**: Kullanıcı paneli ve rezervasyon takibi
+- **📱 Responsive Tasarım**: Tüm cihazlarda mükemmel görünüm
 
-## 🛠️ Teknolojiler
+## 🛠️ Teknoloji Stack
 
-- **Frontend**: React 19, TypeScript, Vite, Tailwind CSS
-- **State**: Redux Toolkit, React Redux
-- **Backend**: Supabase (PostgreSQL)
-- **UI**: React Icons, React Hook Form, React Toastify
+### Frontend
+
+- **React 19**: Modern React özellikleri ve hooks
+- **TypeScript**: Tip güvenliği ve geliştirici deneyimi
+- **Vite**: Hızlı build tool ve dev server
+- **Tailwind CSS**: Utility-first CSS framework
+- **React Router DOM**: Client-side routing
+
+### State Management
+
+- **Redux Toolkit**: Modern Redux kullanımı
+- **React Redux**: React-Redux entegrasyonu
+
+### Backend & Database
+
+- **Supabase**: Backend-as-a-Service
+- **PostgreSQL**: Güçlü ilişkisel veritabanı
+- **Row Level Security**: Veri güvenliği
+
+### UI/UX Libraries
+
+- **React Icons**: Icon kütüphanesi
+- **React Hook Form**: Form yönetimi ve validasyon
+- **React Toastify**: Bildirim sistemi
+- **React DatePicker**: Tarih seçici
+- **Date-fns**: Tarih işlemleri
+
+## 🚀 Kurulum
+
+1. **Projeyi klonlayın**
+
+```bash
+git clone <repository-url>
+cd rent-a-car
+```
+
+2. **Bağımlılıkları yükleyin**
+
+```bash
+npm install
+```
+
+3. **Çevre değişkenlerini ayarlayın**
+   `.env.local` dosyası oluşturun:
+
+```env
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+4. **Uygulamayı başlatın**
+
+```bash
+npm run dev
+```
+
+## 📖 Kullanım
+
+### Ana Sayfa
+
+- Öne çıkan araçları görüntüleme
+- Hızlı araç arama butonu
+- Uygulama özelliklerini keşfetme
+
+### Araç Arama ve Filtreleme
+
+- **Filtreler**: Tarih, fiyat, şehir, marka, yakıt türü, vites, koltuk sayısı
+- **Arama**: Gelişmiş filtreleme sistemi
+- **Detaylar**: Araç özellikleri ve görselleri
+
+### Rezervasyon Süreci
+
+1. İstediğiniz aracı seçin
+2. Başlangıç ve bitiş tarihlerini belirleyin
+3. Teslimat lokasyonunu girin
+4. Rezervasyonu onaylayın
+
+### Dashboard
+
+- **Rezervasyonlarım**: Tüm rezervasyonları görüntüleme
+- **Yeni Rezervasyon**: Hızlı rezervasyon yapma
+- **Profil**: Hesap bilgileri (geliştiriliyor)
+
+## 🗄️ Veritabanı
+
+Supabase PostgreSQL veritabanı kullanılmaktadır:
+
+### Tablolar
+
+- **users**: Kullanıcı bilgileri (id, name, surname, email)
+- **cars**: Araç bilgileri (marka, model, yıl, fiyat, özellikler)
+- **rentals**: Rezervasyon kayıtları (tarih, fiyat, durum)
+
+### Güvenlik
+
+- **Row Level Security (RLS)**: Veri seviyesinde güvenlik
+- **JWT Tokens**: Güvenli kimlik doğrulama
+- **API Keys**: Güvenli API erişimi
 
 ## 🔄 Geliştirme Durumu
 
@@ -23,17 +117,67 @@ Modern, responsive araç kiralama web uygulaması. React, TypeScript ve Supabase
 
 - Kimlik doğrulama sistemi
 - Araç listesi ve detayları
+- Rezervasyon sistemi
+- Dashboard ve kullanıcı paneli
 - Responsive tasarım
-- Dashboard layout'u
 
 ### 🚧 Geliştiriliyor
 
-- Rezervasyon sistemi
 - Profil yönetimi
 - Ödeme entegrasyonu
 
 ### 📋 Gelecek
 
 - Admin paneli
-- Mobil uygulama
+- Mobil uygulama (React Native)
 - Çoklu dil desteği
+- Ödeme entegrasyonu (Stripe/PayPal)
+- Email bildirimleri
+- Araç yorumları ve puanlama
+
+## 🏗️ Proje Yapısı
+
+```
+src/
+├── components/          # React bileşenleri
+│   ├── car/            # Araç bileşenleri
+│   ├── common/         # Ortak bileşenler
+│   ├── dashboard/      # Dashboard bileşenleri
+│   └── utils/          # Yardımcı fonksiyonlar
+├── layouts/            # Layout bileşenleri
+├── routes/             # Routing yapısı
+├── services/           # API servisleri
+├── store/              # Redux store
+├── types/              # TypeScript tipleri
+└── utils/              # Yardımcı fonksiyonlar
+```
+
+## 🔧 Geliştirme Komutları
+
+```bash
+# Geliştirme sunucusunu başlat
+npm run dev
+
+# Production build
+npm run build
+
+# Linting
+npm run lint
+
+# Preview
+npm run preview
+```
+
+## 📱 Responsive Tasarım
+
+- **Mobile First**: Mobil cihazlar öncelikli tasarım
+- **Breakpoints**: sm (640px), md (768px), lg (1024px), xl (1280px)
+- **Modern UI**: Tailwind CSS ile şık tasarım
+
+## 🔒 Güvenlik Özellikleri
+
+- **Input Validation**: Form doğrulama
+- **Error Handling**: Güvenli hata yönetimi
+- **Protected Routes**: Yetkilendirme kontrolü
+- **SQL Injection**: Supabase ile otomatik koruma
+- **XSS Protection**: React'in built-in koruması
