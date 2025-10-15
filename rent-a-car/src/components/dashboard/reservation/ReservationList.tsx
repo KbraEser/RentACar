@@ -100,7 +100,6 @@ const ReservationList = () => {
             </thead>
             <tbody>
               {rentals.map((reservation) => {
-                console.log("Reservation:", reservation);
                 return (
                   <tr
                     className="border-b"

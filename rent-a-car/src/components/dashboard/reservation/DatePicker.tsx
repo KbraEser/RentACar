@@ -7,7 +7,10 @@ import type {
 import type { ReservationFormData } from "./ReservationForm";
 import { registerLocale } from "react-datepicker";
 import { tr } from "date-fns/locale/tr";
-import { generateDisabledDates } from "../../../utils/dateHelpers";
+import {
+  generateDisabledDates,
+  localizeDate,
+} from "../../../utils/dateHelpers";
 import type { RootState } from "../../../store/store";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks/storeHooks";
 import { useEffect } from "react";
@@ -46,7 +49,7 @@ const DatePicker = ({ register, watch, setValue, carId }: DatePickerProps) => {
     if (startDate && endDate) {
       isSelectedDateInDisabledDates(startDate, endDate, reservations, setValue);
     }
-  }, [startDate, endDate, reservations, setValue]);
+  }, [startDate, endDate, reservations]);
 
   return (
     <div className="reservation-form-grid">
@@ -57,10 +60,7 @@ const DatePicker = ({ register, watch, setValue, carId }: DatePickerProps) => {
           selected={startDate ? new Date(startDate + "T00:00:00") : null}
           onChange={(date) => {
             if (date) {
-              const year = date.getFullYear();
-              const month = String(date.getMonth() + 1).padStart(2, "0");
-              const day = String(date.getDate()).padStart(2, "0");
-              setValue("startDate", `${year}-${month}-${day}`);
+              setValue("startDate", localizeDate(date));
             } else {
               setValue("startDate", "");
             }
@@ -83,10 +83,7 @@ const DatePicker = ({ register, watch, setValue, carId }: DatePickerProps) => {
           selected={endDate ? new Date(endDate + "T00:00:00") : null}
           onChange={(date) => {
             if (date) {
-              const year = date.getFullYear();
-              const month = String(date.getMonth() + 1).padStart(2, "0");
-              const day = String(date.getDate()).padStart(2, "0");
-              setValue("endDate", `${year}-${month}-${day}`);
+              setValue("endDate", localizeDate(date));
             } else {
               setValue("endDate", "");
             }
