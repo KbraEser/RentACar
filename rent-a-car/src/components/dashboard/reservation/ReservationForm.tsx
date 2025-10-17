@@ -170,7 +170,6 @@ const ReservationForm = () => {
                           total_price: totalPrice,
                           status: "active",
                           city: car.city,
-
                           location: deliveryLocation,
                         },
                         car: car,

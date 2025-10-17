@@ -28,6 +28,7 @@ import Dashboard from "../components/dashboard/Dashboard";
 import RezervationForm from "../components/dashboard/reservation/ReservationForm";
 import ReservationSuccess from "../components/dashboard/reservation/ReservationSuccess";
 import ReservationList from "../components/dashboard/reservation/ReservationList";
+import LoadingCard from "../components/common/LoadingCard";
 
 export default createBrowserRouter([
   {
@@ -41,6 +42,7 @@ export default createBrowserRouter([
         loader: async () => {
           return await fetchFeaturedCars();
         },
+        hydrateFallbackElement: <LoadingCard title="HomePage yükleniyor..." />,
       },
       {
         path: "cars",
@@ -48,11 +50,15 @@ export default createBrowserRouter([
         loader: async () => {
           return await fetchAllCars();
         },
+        hydrateFallbackElement: <LoadingCard title="Araçlar yükleniyor..." />,
       },
       {
         path: "cars/carsDetail/:id",
         element: <CarDetailsModel />,
         loader: carLoader,
+        hydrateFallbackElement: (
+          <LoadingCard title="Araç detayı yükleniyor..." />
+        ),
       },
     ],
   },
@@ -63,10 +69,12 @@ export default createBrowserRouter([
       {
         path: "login",
         element: <LoginPage />,
+        hydrateFallbackElement: <LoadingCard title="Giriş yapılıyor..." />,
       },
       {
         path: "register",
         element: <RegisterPage />,
+        hydrateFallbackElement: <LoadingCard title="Kayıt yapılıyor..." />,
       },
     ],
   },
@@ -81,6 +89,7 @@ export default createBrowserRouter([
       {
         index: true,
         element: <Dashboard />,
+        hydrateFallbackElement: <LoadingCard title="Dashboard yükleniyor..." />,
       },
       {
         path: "cars",
@@ -88,24 +97,35 @@ export default createBrowserRouter([
         loader: async () => {
           return await fetchAllCars();
         },
+        hydrateFallbackElement: <LoadingCard title="Araçlar yükleniyor..." />,
       },
       {
         path: "cars/:id",
         element: <CarDetailsModel />,
         loader: carLoader,
+        hydrateFallbackElement: (
+          <LoadingCard title="Araç detayı yükleniyor..." />
+        ),
       },
       {
         path: "reservationForm/:id",
         element: <RezervationForm />,
         loader: carLoader,
+        hydrateFallbackElement: (
+          <LoadingCard title="Rezervasyon formu yükleniyor..." />
+        ),
       },
       {
         path: "reservationSuccess",
         element: <ReservationSuccess />,
+        hydrateFallbackElement: <LoadingCard title="Rezervasyon başarılı..." />,
       },
       {
         path: "reservation",
         element: <ReservationList />,
+        hydrateFallbackElement: (
+          <LoadingCard title="Rezervasyonlar yükleniyor..." />
+        ),
       },
 
       {
@@ -152,6 +172,9 @@ export default createBrowserRouter([
               </div>
             </div>
           </div>
+        ),
+        hydrateFallbackElement: (
+          <LoadingCard title="Profil ayarları yükleniyor..." />
         ),
       },
     ],

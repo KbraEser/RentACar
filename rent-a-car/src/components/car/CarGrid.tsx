@@ -1,23 +1,12 @@
 import type { Car } from "../../types/car";
 import CarItem from "./CarItem";
-import LoadingCard from "../common/LoadingCard";
 
 interface CarGridProps {
   cars: Car[];
   loading?: boolean;
 }
 
-export default function CarGrid({ cars, loading = false }: CarGridProps) {
-  if (loading) {
-    return (
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-        {Array.from({ length: 8 }).map((_, index) => (
-          <LoadingCard key={index} title="Araç yükleniyor..." />
-        ))}
-      </div>
-    );
-  }
-
+export default function CarGrid({ cars }: CarGridProps) {
   if (!cars || cars.length === 0) {
     return (
       <div className="text-center py-12">

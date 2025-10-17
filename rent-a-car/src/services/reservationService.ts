@@ -19,7 +19,7 @@ export const createReservationService = async (
         end_date: reservation.end_date,
         total_price: reservation.total_price,
         city: car.city,
-        location: reservation.delivery_location,
+        location: reservation.location,
         status: "active",
         created_at: now,
         updated_at: now,

@@ -5,7 +5,6 @@ import {
   cancelReservation,
   fetchRentals,
 } from "../../../store/slices/rentalsSlice";
-import LoadingCard from "../../common/LoadingCard";
 import ReservationListError from "./ReservationListError";
 import ReservationListNull from "./ReservationListNull";
 import { toast } from "react-toastify";
@@ -22,14 +21,6 @@ const ReservationList = () => {
       dispatch(fetchRentals(user.id));
     }
   }, [dispatch, user]);
-
-  if (loading) {
-    return (
-      <div className="space-y-6 m-10 ">
-        <LoadingCard title="Rezervasyonlar yükleniyor..." />
-      </div>
-    );
-  }
 
   if (error) {
     return <ReservationListError />;

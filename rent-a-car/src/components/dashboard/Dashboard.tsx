@@ -4,25 +4,16 @@ import { NavLink } from "react-router-dom";
 import { useEffect } from "react";
 import { AiOutlinePlus, AiOutlineUser } from "react-icons/ai";
 import { fetchFeaturedCars } from "../../store/slices/carSlice";
-import LoadingCard from "../common/LoadingCard";
+
 import ReservationList from "./reservation/ReservationList";
 
 const Dashboard = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state: RootState) => state.auth.user);
-  const { loading } = useAppSelector((state: RootState) => state.car);
 
   useEffect(() => {
     dispatch(fetchFeaturedCars());
   }, [dispatch]);
-
-  if (loading) {
-    return (
-      <div className="m-10">
-        <LoadingCard title="Dashboard yükleniyor..." />
-      </div>
-    );
-  }
 
   return (
     <div className="space-y-10 m-10 mt-20">
